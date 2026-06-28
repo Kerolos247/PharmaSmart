@@ -10,5 +10,6 @@ namespace WebApplication4.Domain.IRepository
         Task<Inventory?> GetByMedicineIdAsync(int medicineId);
         Task UpdateAsync(Inventory item);
         Task DeleteAsync(Inventory item);
+        Task<Inventory> GetByMedicineIdWithLockAsync(int medicineId);
     }
 }

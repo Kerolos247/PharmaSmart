@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApplication4.Application.Dto.Patient;
-using WebApplication4.Application.Dto.SentimentModel;
-using WebApplication4.Application.IServices;
+using WebApplication4.Application.Common.Interfaces;
+using WebApplication4.Application.Common.Dtos.SentimentModel;
+using WebApplication4.Application.Feedback_Component.IService;
+using WebApplication4.Application.Patient_Component.Patient;
 using WebApplication4.Domain.Models;
-using WebApplication4.Infrastructure.Services;
-using static System.Net.Mime.MediaTypeNames;
+using WebApplication4.Infrastructure.Feedback_Component;
+using WebApplication4.Application.Common.IServices;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace WebApplication4.Pressention.Controllers
 {
@@ -25,6 +27,7 @@ namespace WebApplication4.Pressention.Controllers
            
         }
         [HttpPost]
+        [EnableRateLimiting("FeedbackRateLimit")]
         public async Task<IActionResult> CreateFeedback(PatientFeedbackDto feedbackDto)
         {
             if (!ModelState.IsValid)
@@ -32,7 +35,7 @@ namespace WebApplication4.Pressention.Controllers
                 return View(feedbackDto);
             }
 
-            // 1. تحليل المشاعر
+            
             var analysisResult = await _sentimentService.AnalyzeAsync(feedbackDto.Notes);
 
            
@@ -42,17 +45,17 @@ namespace WebApplication4.Pressention.Controllers
 
             if (label == "POSITIVE")
             {
-                //TempData["FeedBackMessage"] = "رساله حلوه";
+                
                 sentiment = FeedbackSentiment.Positive;
             }
             else
             {
-                //TempData["FeedBackMessage"] = "رساله وحشه";
+                
                 sentiment = FeedbackSentiment.Negative;
             }
            
 
-            // 3. تعيين القيمة وحفظ البيانات
+            
             feedbackDto.feedbackSentiment = sentiment;
             var res = await _feedBackService.AddAsync(feedbackDto);
 

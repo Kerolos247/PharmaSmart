@@ -2,10 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using WebApplication4.Application.Common.PaymentStrategies;
 using WebApplication4.Application.Common.Results;
-using WebApplication4.Application.Dto.Prescription;
-using WebApplication4.Application.IServices;
-using WebApplication4.Application.Services.PaymentStrategies;
+using WebApplication4.Application.Prescription_Component.Prescription;
 using WebApplication4.Domain.Models;
 
 namespace WebApplication4.Pressention.Controllers
@@ -129,7 +128,7 @@ namespace WebApplication4.Pressention.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Pay(int id)
         {
-            IPayment payment = PaymentFactory.GetStrategy();
+            IDiscountStrategy payment = PaymentFactory.GetStrategy();
             var success = await _prescriptionService.PayAsync(id, payment);
 
             if (!success.IsSuccess)

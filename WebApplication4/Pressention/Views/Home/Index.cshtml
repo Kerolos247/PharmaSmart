@@ -2,7 +2,7 @@
 
 @{
     Layout = null;
-    ViewData["Title"] = "صيدلية الرحمة - نظام الإدارة الذكي";
+    ViewData["Title"] = "PharmaSmart - نظام الإدارة الذكي";
 }
 
 <!DOCTYPE html>
@@ -10,25 +10,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صيدلية الرحمة | Al-Rahma Pharmacy</title>
+    <title>PharmaSmart</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Noto+Kufi+Arabic:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="~/css/Home.css" />
 
     <style>
+        /* الـ CSS الخاص بأيقونة اللوجو الطبية الجديدة */
+        .modern-medical-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+            border-radius: 10px;
+            color: #0284c7;
+            font-size: 1.2rem;
+            margin-left: 12px;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.1);
+        }
+
         .toast-notification {
             position: fixed;
-            bottom: 30px;
+            top: 100px;
             right: 30px;
-            background: #f3e8ff;
-            border: 2px solid #8e44ad;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
             padding: 18px 22px;
             border-radius: 14px;
             display: flex;
             align-items: center;
             gap: 14px;
-            box-shadow: 0 12px 35px rgba(142, 68, 173, 0.35);
+            box-shadow: 0 10px 30px rgba(22, 163, 74, 0.06);
             z-index: 1000;
             animation: slideInLeft 0.6s ease;
             min-width: 280px;
@@ -36,7 +51,7 @@
         }
 
         .toast-icon {
-            background: #8e44ad;
+            background: #16a34a;
             color: #fff;
             width: 42px;
             height: 42px;
@@ -51,14 +66,14 @@
         .toast-content h4 {
             margin: 0;
             font-size: 1.05rem;
-            color: #5b2c83;
+            color: #14532d;
             font-weight: 800;
         }
 
         .toast-content p {
             margin: 5px 0 0;
             font-size: 0.93rem;
-            color: #4a235a;
+            color: #166534;
             font-weight: 600;
             line-height: 1.5;
         }
@@ -66,48 +81,52 @@
         .close-toast {
             background: none;
             border: none;
-            color: #5b2c83;
+            color: #166534;
             cursor: pointer;
             font-size: 1.1rem;
             font-weight: bold;
             padding: 0;
             margin-left: 8px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
         }
+
+            .close-toast:hover {
+                opacity: 1;
+            }
 
         @@keyframes slideInLeft {
-            from
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
 
-        {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         @@media (max-width: 576px) {
-            .toast-notification
+            .toast-notification {
+                right: 15px;
+                left: 15px;
+                top: 20px;
+            }
 
-        {
-            right: 15px;
-            left: 15px;
-            bottom: 20px;
-        }
+            .brand {
+                color: #0284c7;
+                font-weight: bold;
+            }
 
-        }
-
-        .nav-logo-img {
-            height: 40px;
-            width: auto;
-            margin-left: 10px;
+            .tagline {
+                color: #1e3a8a;
+                font-size: 0.8em;
+            }
         }
 
         .btn-signup {
-            background: linear-gradient(135deg, #27ae60, #1e8449);
+            background: linear-gradient(135deg, #0284c7, #0369a1);
             color: #fff;
             padding: 12px 28px;
             border-radius: 30px;
@@ -116,14 +135,188 @@
             text-decoration: none;
             display: inline-block;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(142, 68, 173, 0.4);
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
         }
 
             .btn-signup:hover {
-                transform: translateY(-2px) scale(1.05);
-                box-shadow: 0 12px 25px rgba(142, 68, 173, 0.5);
-                background: linear-gradient(135deg, #27ae60, #1e8449);
+                transform: translateY(-2px) scale(1.02);
+                box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
+                background: linear-gradient(135deg, #0284c7, #0369a1);
             }
+
+        /* ==================== الشات الذكي (يمين) ==================== */
+        .chat-floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(2, 132, 199, 0.3);
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+
+            .chat-floating-btn:hover {
+                transform: scale(1.08) rotate(5deg);
+            }
+
+        .chat-window {
+            position: fixed;
+            bottom: 105px;
+            right: 30px;
+            width: 370px;
+            height: 500px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            z-index: 999;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            font-family: 'Tajawal', sans-serif;
+            animation: fadeInChat 0.3s ease;
+        }
+
+        @@keyframes fadeInChat {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .chat-header h3 {
+                margin: 0;
+                font-size: 1.1rem;
+                font-weight: 700;
+            }
+
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+            .chat-message.user {
+                background-color: #0284c7;
+                color: white;
+                align-self: flex-start;
+                border-bottom-right-radius: 2px;
+            }
+
+            .chat-message.bot {
+                background-color: #ffffff;
+                color: #1e293b;
+                align-self: flex-end;
+                border-bottom-left-radius: 2px;
+                border: 1px solid #e2e8f0;
+            }
+
+        .chat-footer {
+            padding: 15px;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid #cbd5e1;
+            border-radius: 25px;
+            padding: 10px 18px;
+            outline: none;
+            font-family: 'Tajawal';
+            font-size: 0.95rem;
+        }
+
+        .chat-send-btn, .chat-mic-btn {
+            background: #0284c7;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+            .chat-send-btn:hover {
+                background: #0369a1;
+            }
+
+            /* ستايل المايك أثناء التسجيل */
+            .chat-mic-btn.recording {
+                background: #ef4444;
+                animation: pulseMic 1.2s infinite;
+            }
+
+        @@keyframes pulseMic {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .chat-window {
+                width: calc(100% - 40px);
+                left: 20px;
+                right: 20px;
+                bottom: 90px;
+                height: 450px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -132,32 +325,65 @@
 
     <nav class="navbar">
         <div class="logo-container" style="display: flex; align-items: center;">
-            <img src="https://res.cloudinary.com/doehzk8fv/image/upload/v1771597792/Al_Rahma_eunf4y.png" alt="Logo" class="nav-logo-img">
-            <div class="logo-text">صيدلية الرحمة</div>
+            <div class="modern-medical-logo">
+                <i class="fas fa-microscope"></i>
+            </div>
+            <div class="logo-text" style="color: #0369a1; font-weight: 700; font-size: 1.35rem;">PharmaSmart</div>
         </div>
         <div class="nav-buttons" style="flex: 1; display: flex; justify-content: flex-end;">
-            <a href="/Feedback/CreateFeedback" class="btn btn-signup">
-                💬 رأيكم يهمنا
-            </a>
+            <a href="/Feedback/CreateFeedback" class="btn btn-signup">💬 رأيكم يهمنا</a>
         </div>
     </nav>
 
     <section class="hero">
         <div class="hero-container">
             <div class="hero-content fade-in">
-                <span class="badge">خدمة متاحة 24 ساعة</span>
-                <h1>صيدلية <span>الرحمة</span><br>راحتك وصحتك أولويتنا</h1>
-                <p>
+                <span class="badge" style="background: #e0f2fe; color: #0369a1; padding: 6px 16px; border-radius: 20px; font-weight: 600;">خدمة متاحة 24 ساعة</span>
+                <h1>
+                    <span class="brand" style="color: #0284c7; display: inline-block; margin-top: 15px;">PharmaSmart</span><br>
+                    <span class="tagline" style="color: #1e3a8a; font-weight: 700;">راحتك وصحتك أولويتنا</span>
+                </h1>
+                <p style="color: #475569; line-height: 1.8;">
                     نوفر لك خدمة إرسال وتوصيل الأدوية في أسرع وقت ممكن،
                     مع إمكانية رفع الروشتات أونلاين ومتابعة طلبك بكل سهولة وأمان.
                     فريقنا الصيدلي جاهز لخدمتك على مدار الساعة.
                 </p>
                 <div class="cta-area">
-                    <a href="/PrescriptionUpload/Upload" class="main-action">ارفع روشتتك الآن</a>
+                    <a href="/PrescriptionUpload/Upload" class="main-action" style="background: #0284c7; color: #fff; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; display: inline-block; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);">ارفع روشتتك الآن</a>
                 </div>
             </div>
         </div>
     </section>
+
+    <div class="chat-floating-btn" id="chatFloatingBtn" onclick="toggleChatWindow()">
+        <i class="fas fa-comments"></i>
+    </div>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-robot"></i>
+                <h3>صيدلي فارما سمارت الذكي</h3>
+            </div>
+            <i class="fas fa-times" style="cursor: pointer; opacity: 0.8;" onclick="toggleChatWindow()"></i>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-message bot">
+                أهلاً بحضرتك يا فندم في صيدلية فارما سمارت! نورتنا دايماً، إزاي أقدر أساعدك النهاردة؟ 😊
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" class="chat-input" id="chatInput" placeholder="اكتب استفسارك هنا..." onkeypress="handleChatKeyPress(event)">
+
+            <button class="chat-mic-btn" id="micBtn" onclick="toggleVoiceRecording()">
+                <i class="fas fa-microphone" id="micIcon"></i>
+            </button>
+
+            <button class="chat-send-btn" onclick="sendChatMessage()">
+                <i class="fas fa-paper-plane" style="transform: rotate(180deg);"></i>
+            </button>
+        </div>
+    </div>
 
     @if (TempData["UploadMessage"] != null)
     {
@@ -215,5 +441,182 @@
         </script>
     }
 
+    <script>
+        function toggleChatWindow() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.style.display = (chatWindow.style.display === 'none' || chatWindow.style.display === '') ? 'flex' : 'none';
+            if(chatWindow.style.display === 'flex') document.getElementById('chatInput').focus();
+        }
+
+        // متغيرات هندلة الصوت والمايك
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+
+        async function toggleVoiceRecording() {
+            const micBtn = document.getElementById('micBtn');
+            const micIcon = document.getElementById('micIcon');
+            const inputField = document.getElementById('chatInput');
+
+            if (!isRecording) {
+                // بدء التسجيل
+                audioChunks = [];
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+
+                    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+
+                    mediaRecorder.onstop = async () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        // إرسال الـ Blob مباشرة إلى دالة الـ Fetch
+                        sendVoiceMessage(audioBlob);
+                    };
+
+                    mediaRecorder.start();
+                    isRecording = true;
+                    micBtn.classList.add('recording');
+                    micIcon.className = "fas fa-stop";
+                    inputField.placeholder = "جاري تسجيل صوتك الآن... دوس إيقاف للإرسال";
+                    inputField.disabled = true;
+                } catch (err) {
+                    alert("برجاء السماح بصلاحية المايك للتحدث.");
+                }
+            } else {
+                // إيقاف التسجيل
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop()); // إغلاق المايك
+                isRecording = false;
+                micBtn.classList.remove('recording');
+                micIcon.className = "fas fa-microphone";
+                inputField.placeholder = "اكتب استفسارك هنا...";
+                inputField.disabled = false;
+            }
+        }
+
+       
+            async function sendChatMessage() {
+            const inputElement = document.getElementById('chatInput');
+            const messageText = inputElement.value.trim();
+            if (!messageText) return;
+
+            appendUserMessage(messageText);
+            inputElement.value = '';
+
+           
+            const botDiv = appendBotPlaceholder();
+
+            try {
+                const response = await fetch('/AiChat/SendChat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: messageText })
+                });
+
+                if (!response.ok) throw new Error("Network response was not ok");
+
+                const data = await response.json();
+
+                if (data.success) {
+                   
+                    if (data.reply && data.reply.includes("[SHOW_MAP]")) {
+                        
+                        let cleanText = data.reply.replace(/\[SHOW_MAP\]\s*http[s]?:\/\/?[^\s]+/g, '').trim();
+
+                       
+                        botDiv.innerText = cleanText ? cleanText : "اتفضل حضرتك مكان فرعنا الرئيسي في الدقي على الخريطة:";
+
+                       
+                        const mapContainer = document.createElement('div');
+                        mapContainer.style.marginTop = "10px";
+                        mapContainer.style.borderRadius = "8px";
+                        mapContainer.style.overflow = "hidden";
+                        mapContainer.innerHTML = `
+                            <iframe
+                                width="100%"
+                                height="250"
+                                frameborder="0"
+                                style="border:0; display:block;"
+                                src="https://maps.google.com/maps?q=${encodeURIComponent('شارع التحرير، الدقي، بجوار محطة المترو')}&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                                allowfullscreen>
+                            </iframe>`;
+                        botDiv.appendChild(mapContainer);
+                    } else {
+                       
+                        botDiv.innerText = data.reply;
+                    }
+                   
+                } else {
+                    botDiv.innerText = data.reply || "عذراً، واجهت مشكلة في معالجة النص.";
+                }
+            } catch (err) {
+                botDiv.innerText = "بعتذر لحضرتك جداً، حصل مشكلة في الاتصال بالسيرفر.";
+                console.error("طلب النص فشل: ", err);
+            } finally {
+                document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
+            }
+        }
+
+       
+        async function sendVoiceMessage(audioBlob) {
+            appendUserMessage("🎙️ رسالة صوتية...");
+
+           
+            const botDiv = appendBotPlaceholder();
+
+           
+            const formData = new FormData();
+            formData.append("audioFile", audioBlob, "voice.wav");
+
+            try {
+                const response = await fetch('/AiChat/SendVoice', {
+                    method: 'POST',
+                    body: formData 
+                });
+
+                if (!response.ok) throw new Error("Network response was not ok");
+
+                const data = await response.json();
+
+                if (data.success) {
+                    botDiv.innerText = data.reply; 
+                } else {
+                    botDiv.innerText = data.reply || "عذراً، فشل معالجة الملف الصوتي.";
+                }
+            } catch (err) {
+                botDiv.innerText = "بعتذر لحضرتك، حصل مشكلة أثناء رفع أو معالجة الصوت.";
+                console.error("طلب الصوت فشل: ", err);
+            } finally {
+                document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
+            }
+        }
+
+       
+        function appendUserMessage(text) {
+            const chatBody = document.getElementById('chatBody');
+            const userDiv = document.createElement('div');
+            userDiv.className = 'chat-message user';
+            userDiv.innerText = text;
+            chatBody.appendChild(userDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function appendBotPlaceholder() {
+            const chatBody = document.getElementById('chatBody');
+            const botDiv = document.createElement('div');
+            botDiv.className = 'chat-message bot';
+            
+            botDiv.innerHTML = "<i class='fas fa-spinner fa-spin' style='margin-left: 8px;'></i> جاري التفكير...";
+            chatBody.appendChild(botDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+            return botDiv;
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') sendChatMessage();
+        }
+    </script>
 </body>
 </html>

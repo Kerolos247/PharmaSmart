@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication4.Application.Dto.Supplier;
-using WebApplication4.Application.IServices;
+using WebApplication4.Application.Supplier_Component.Supplier;
 using WebApplication4.Domain.Models;
 
 namespace WebApplication4.Pressention.Controllers

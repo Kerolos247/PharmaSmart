@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication4.Application.IServices;
+using WebApplication4.Application.Inventory_Component.IService;
 
 namespace WebApplication4.Pressention.Controllers
 {

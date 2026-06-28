@@ -1,60 +1,66 @@
 ﻿@model PrescriptionUploadDto
 @{
-    ViewData["Title"] = "Prescription Hub";
+    ViewData["Title"] = "مركز الروشتات الذكي";
     Layout = null;
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Outfit:wght@300;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.9);
-            --primary-gradient: linear-gradient(45deg, #00dbde 0%, #fc00ff 100%);
-            --accent-color: #6c5ce7;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+           
+            --primary-gradient: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            --accent-color: #0284c7;
+            --text-main: #1e3a8a; 
         }
 
         body {
-            font-family: 'Outfit', 'Cairo', sans-serif;
-            background: #0f0c29;
-            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            font-family: 'Cairo', 'Outfit', sans-serif;
+           
+            background: #f8fafc;
+            background: linear-gradient(135deg, #f0faf1 0%, #e0f2fe 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow-x: hidden;
             padding: 20px;
+            color: var(--text-main);
         }
 
-       
         .main-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            border: 1px solid rgba(2, 132, 199, 0.15);
+            /* شادو طبيعي وناعم يمنع تشتيت المستخدم */
+            box-shadow: 0 25px 50px rgba(2, 132, 199, 0.08);
+            width: 100%;
+            max-width: 550px;
             overflow: hidden;
-            animation: slideUp 0.8s ease-out;
+            animation: fadeInScale 0.7s ease-out;
         }
 
-        @@keyframes slideUp {
+        @@keyframes fadeInScale {
             from
 
         {
             opacity: 0;
-            transform: translateY(50px);
+            transform: scale(0.9);
         }
 
         to {
             opacity: 1;
-            transform: translateY(0);
+            transform: scale(1);
         }
 
         }
@@ -68,16 +74,16 @@
         }
 
             .header-section i {
-                font-size: 3.5rem;
-                text-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                margin-bottom: 10px;
+                font-size: 3rem;
+                margin-bottom: 15px;
+                filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
             }
 
         .form-label {
-            font-weight: 600;
-            color: #2d3436;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            margin-right: 5px;
         }
 
         .input-group-custom {
@@ -87,55 +93,65 @@
 
         .form-control-custom {
             width: 100%;
-            padding: 12px 15px 12px 45px;
-            border-radius: 12px;
-            border: 2px solid #eee;
+            padding: 12px 45px 12px 15px; /* تم تعديل البادينج ليتناسب مع الأيقونة اليمين في الـ RTL */
+            border-radius: 15px;
+            border: 2px solid #e2e8f0;
             background: #fdfdfd;
+            color: var(--text-main);
             transition: all 0.3s ease;
         }
 
+            .form-control-custom::placeholder {
+                color: #94a3b8;
+            }
+
             .form-control-custom:focus {
                 border-color: var(--accent-color);
-                box-shadow: 0 0 15px rgba(108, 92, 231, 0.1);
+                box-shadow: 0 0 15px rgba(2, 132, 199, 0.15);
                 outline: none;
                 background: #fff;
             }
 
         .input-icon {
             position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #a29bfe;
+            right: 15px; /* وضع الأيقونة في اليمين تماماً مثل الصفحة السابقة */
+            top: 42px;
+            color: var(--accent-color);
             z-index: 10;
+            font-size: 1.1rem;
         }
 
-        /* منطقة رفع الملفات المتطورة */
+        /* ضبط أيقونة الـ Textarea لتبدأ من الأعلى قليلاً */
+        textarea.form-control-custom + .input-icon {
+            top: 42px;
+        }
+
+        /* منطقة رفع الملفات المتطورة المتناسقة مع الثيم الجديد */
         .upload-zone {
-            border: 2px dashed #b2bec3;
+            border: 2px dashed #cbd5e1;
             border-radius: 20px;
-            padding: 30px;
+            padding: 25px;
             text-align: center;
             transition: 0.3s;
-            background: #f8f9fa;
+            background: #f8fafc;
             position: relative;
             cursor: pointer;
         }
 
             .upload-zone:hover {
                 border-color: var(--accent-color);
-                background: #efedff;
+                background: #f0f9ff;
             }
 
         #preview-container {
             width: 100px;
             height: 100px;
-            margin: 10px auto;
+            margin: 10px auto 0 auto;
             border-radius: 15px;
             overflow: hidden;
             display: none;
             border: 3px solid white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(2, 132, 199, 0.15);
         }
 
             #preview-container img {
@@ -151,92 +167,90 @@
             padding: 15px;
             color: white;
             font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-size: 1.1rem;
             transition: 0.4s;
-            margin-top: 20px;
-            box-shadow: 0 10px 20px rgba(252, 0, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(2, 132, 199, 0.2);
         }
 
             .btn-submit:hover {
-                transform: scale(1.02);
-                box-shadow: 0 15px 25px rgba(252, 0, 255, 0.4);
+                transform: translateY(-3px);
+                box-shadow: 0 15px 25px rgba(2, 132, 199, 0.35);
                 color: #fff;
             }
 
         .error-msg {
-            color: #ff7675;
+            color: #ef4444;
             font-size: 0.8rem;
-            font-weight: 500;
+            font-weight: 600;
+            margin-top: 5px;
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-5 col-lg-6 col-md-8">
-                <div class="main-card">
-                    <div class="header-section">
-                        <i class="fa-solid fa-file-invoice-dollar"></i>
-                        <h2 class="fw-bold">Smart Prescription</h2>
-                        <p class="mb-0 opacity-75">Secure & Fast Upload</p>
-                    </div>
+    <div class="main-card">
+        <div class="header-section">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <h2 class="fw-bold">الروشتة الذكية</h2>
+            <p class="mb-0 opacity-75">رفع آمن وسريع لطلب علاجك</p>
+        </div>
 
-                    <div class="card-body p-4 p-md-5">
-                        <form asp-action="Upload" method="post" enctype="multipart/form-data">
+        <div class="card-body p-4 p-md-5">
+            <form asp-action="Upload" method="post" enctype="multipart/form-data">
 
-                            <div class="input-group-custom">
-                                <label asp-for="FullName" class="form-label">Patient Name</label>
-                                <i class="fa-solid fa-id-card input-icon"></i>
-                                <input asp-for="FullName" class="form-control-custom" placeholder="Enter your full name">
-                                <span asp-validation-for="FullName" class="error-msg"></span>
-                            </div>
+                <div asp-validation-summary="ModelOnly" class="error-msg mb-3"></div>
 
-                            <div class="input-group-custom">
-                                <label asp-for="PhoneNumber" class="form-label">Phone Connection</label>
-                                <i class="fa-solid fa-mobile-screen input-icon"></i>
-                                <input asp-for="PhoneNumber" class="form-control-custom" placeholder="+20 1xx xxx xxxx">
-                                <span asp-validation-for="PhoneNumber" class="error-msg"></span>
-                            </div>
-
-                            <div class="input-group-custom">
-                                <label asp-for="Address" class="form-label">Delivery Destination</label>
-                                <i class="fa-solid fa-location-dot input-icon"></i>
-                                <textarea asp-for="Address" class="form-control-custom" rows="2" placeholder="Where should we deliver?"></textarea>
-                                <span asp-validation-for="Address" class="error-msg"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Prescription Document</label>
-                                <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
-                                    <div id="upload-content">
-                                        <i class="fa-solid fa-cloud-arrow-up fa-2x text-muted mb-2"></i>
-                                        <p class="mb-0 text-muted small">Tap to upload or drag image here</p>
-                                    </div>
-
-                                    <div id="preview-container">
-                                        <img id="img-preview" src="#" alt="preview">
-                                    </div>
-
-                                    <input asp-for="File" type="file" id="fileInput" hidden accept="image/*">
-                                </div>
-                                <span asp-validation-for="File" class="error-msg"></span>
-                            </div>
-
-                            <button type="submit" class="btn btn-submit w-100">
-                                Process Prescription <i class="fa-solid fa-wand-magic-sparkles ms-2"></i>
-                            </button>
-                        </form>
-                    </div>
+                <div class="input-group-custom">
+                    <label asp-for="FullName" class="form-label">اسم المريض</label>
+                    <i class="fa-solid fa-id-card input-icon"></i>
+                    <input asp-for="FullName" class="form-control-custom" placeholder="اكتب اسمك الكامل هنا">
+                    <span asp-validation-for="FullName" class="error-msg"></span>
                 </div>
-            </div>
+
+                <div class="input-group-custom">
+                    <label asp-for="PhoneNumber" class="form-label">رقم التواصل</label>
+                    <i class="fa-solid fa-mobile-screen input-icon"></i>
+                    <input asp-for="PhoneNumber" class="form-control-custom" placeholder="01xxxxxxxxx">
+                    <span asp-validation-for="PhoneNumber" class="error-msg"></span>
+                </div>
+
+                <div class="input-group-custom">
+                    <label asp-for="Address" class="form-label">عنوان التوصيل</label>
+                    <i class="fa-solid fa-location-dot input-icon"></i>
+                    <textarea asp-for="Address" class="form-control-custom" rows="2" placeholder="المحافظة - المدينة - اسم الشارع"></textarea>
+                    <span asp-validation-for="Address" class="error-msg"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">صورة الروشتة الطبية</label>
+                    <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+                        <div id="upload-content">
+                            <i class="fa-solid fa-cloud-arrow-up fa-2x text-muted mb-2" style="color: var(--accent-color) !important; opacity: 0.7;"></i>
+                            <p class="mb-0 text-muted small fw-bold">اضغط هنا لرفع الروشتة أو اسحب الصورة</p>
+                        </div>
+
+                        <div id="preview-container">
+                            <img id="img-preview" src="#" alt="preview">
+                        </div>
+
+                        <input asp-for="File" type="file" id="fileInput" hidden accept="image/*">
+                    </div>
+                    <span asp-validation-for="File" class="error-msg"></span>
+                </div>
+
+                <button type="submit" class="btn btn-submit w-100 mt-2">
+                    معالجة وإرسال الروشتة <i class="fa-solid fa-wand-magic-sparkles ms-2"></i>
+                </button>
+            </form>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+
     <script>
-       
         const fileInput = document.getElementById('fileInput');
         const previewContainer = document.getElementById('preview-container');
         const imgPreview = document.getElementById('img-preview');

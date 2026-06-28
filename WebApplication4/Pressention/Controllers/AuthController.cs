@@ -1,16 +1,17 @@
 ﻿using System.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication4.Application.Dto.Dashboard;
-using WebApplication4.Application.Dto.Auth;
-using WebApplication4.Application.IServices;
+using WebApplication4.Application.Common.Dtos;
 using WebApplication4.Domain.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using WebApplication4.Application.Auth_Component.Dto;
+using WebApplication4.Application.Auth_Component.IService;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace WebApplication4.Pressention.Controllers
 {
-    
+
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
@@ -41,6 +42,7 @@ namespace WebApplication4.Pressention.Controllers
         public IActionResult Login() => View();
 
         [HttpPost]
+        [EnableRateLimiting("LoginRateLimit")]
         public async Task<IActionResult> Login(PharmacistLoginDto dto)
         {
             if (!ModelState.IsValid)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApplication4.Application.Dto.Dashboard;
-using WebApplication4.Application.IServices;
+using WebApplication4.Application.Common.Dtos.Dashboard;
+using WebApplication4.Application.Feedback_Component.IService;
+using WebApplication4.Application.Medcine_Component.IService;
 
 namespace WebApplication4.Pressention.Controllers
 {

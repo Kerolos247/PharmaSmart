@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication4.Application.Dto.Patient;
-using WebApplication4.Application.IServices;
+using WebApplication4.Application.Patient_Component.Patient;
 
 namespace WebApplication4.Pressention.Controllers
 {

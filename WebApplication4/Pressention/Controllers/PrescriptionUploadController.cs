@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApplication4.Application.Dto.PrescriptionUploadDto;
-using WebApplication4.Application.IServices;
+using Microsoft.AspNetCore.RateLimiting;
+using WebApplication4.Application.PrescriptionUpload_Component.PrescriptionUpload;
 
 namespace WebApplication4.Pressention.Controllers
 {
@@ -19,6 +19,7 @@ namespace WebApplication4.Pressention.Controllers
             return View(model);
         }
         [HttpPost]
+        [EnableRateLimiting("UploadRateLimit")]
         public async Task<IActionResult> Upload(PrescriptionUploadDto prescriptionUploadDto)
         {
             if(!ModelState.IsValid)

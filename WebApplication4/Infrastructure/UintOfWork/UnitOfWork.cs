@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using WebApplication4.Application.IServices;
+using WebApplication4.Application.Common.Interfaces;
 using WebApplication4.Domain.IRepository;
 using WebApplication4.Infrastructure.DB;
 

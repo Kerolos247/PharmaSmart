@@ -17,29 +17,33 @@
 
     <style>
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.92);
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --accent-color: #764ba2;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            /* بالتة الألوان الطبية الجديدة المعتمدة على الأزرق السحابي والداكن المريح */
+            --primary-gradient: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            --accent-color: #0284c7;
+            --text-main: #1e3a8a; /* كحلي ناعم وعميق بديل للأسود والرمادي الكئيب */
         }
 
         body {
             font-family: 'Cairo', 'Outfit', sans-serif;
-            background: #1a1a2e; /* خلفية داكنة لتبقظ الألوان */
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            /* خلفية متناسقة تماماً مع ثيم الصفحة الرئيسية النظيف */
+            background: #f8fafc;
+            background: linear-gradient(135deg, #f0faf1 0%, #e0f2fe 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            color: #2d3436;
+            color: var(--text-main);
         }
 
         .main-card {
             background: var(--glass-bg);
             backdrop-filter: blur(15px);
             border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            border: 1px solid rgba(2, 132, 199, 0.15);
+            /* شادو طبيعي وناعم يمنع تشتيت المستخدم */
+            box-shadow: 0 25px 50px rgba(2, 132, 199, 0.08);
             width: 100%;
             max-width: 550px;
             overflow: hidden;
@@ -69,12 +73,12 @@
             .header-section i {
                 font-size: 3rem;
                 margin-bottom: 15px;
-                filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+                filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
             }
 
         .form-label {
             font-weight: 700;
-            color: #4834d4;
+            color: var(--text-main); /* تم تغييرها لتتناسب مع درجات الأزرق الداكن الاحترافي */
             font-size: 0.95rem;
             margin-right: 5px;
         }
@@ -86,24 +90,29 @@
 
         .form-control-custom {
             width: 100%;
-            padding: 12px 45px 12px 15px; /* عكس الـ Padding عشان الـ RTL */
+            padding: 12px 45px 12px 15px;
             border-radius: 15px;
-            border: 2px solid #eee;
+            border: 2px solid #e2e8f0;
             background: #fdfdfd;
+            color: var(--text-main);
             transition: all 0.3s ease;
         }
 
+            .form-control-custom::placeholder {
+                color: #94a3b8;
+            }
+
             .form-control-custom:focus {
                 border-color: var(--accent-color);
-                box-shadow: 0 0 15px rgba(118, 75, 162, 0.1);
+                box-shadow: 0 0 15px rgba(2, 132, 199, 0.15);
                 outline: none;
                 background: #fff;
             }
 
         .input-icon {
             position: absolute;
-            right: 15px; /* يمين عشان العربي */
-            top: 42px; /* تعديل المكان حسب الـ Label */
+            right: 15px;
+            top: 42px;
             color: var(--accent-color);
             z-index: 10;
             font-size: 1.1rem;
@@ -118,17 +127,17 @@
             font-weight: 700;
             font-size: 1.1rem;
             transition: 0.4s;
-            box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3);
+            box-shadow: 0 10px 20px rgba(2, 132, 199, 0.2);
         }
 
             .btn-submit:hover {
                 transform: translateY(-3px);
-                box-shadow: 0 15px 25px rgba(118, 75, 162, 0.5);
+                box-shadow: 0 15px 25px rgba(2, 132, 199, 0.35);
                 color: #fff;
             }
 
         .error-msg {
-            color: #eb4d4b;
+            color: #ef4444; /* درجة أحمر تحذيرية ناعمة ومدروسة للموقع الطبي */
             font-size: 0.8rem;
             font-weight: 600;
             margin-top: 5px;

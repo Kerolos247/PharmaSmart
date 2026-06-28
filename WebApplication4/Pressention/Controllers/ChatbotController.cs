@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApplication4.Application.Dto.ChatAi;
-using WebApplication4.Application.IServices;
+using WebApplication4.Application.ChatAi_Component.ChatAi;
+using WebApplication4.Application.ChatAi_Component.IService;
 
 public class ChatbotController : Controller
 {
-    private readonly IChatAiService _chatAiService;
+    private readonly IPharmacistClinicalAssistantService _chatAiService;
 
-    public ChatbotController(IChatAiService chatAiService)
+    public ChatbotController(IPharmacistClinicalAssistantService chatAiService)
     {
         _chatAiService = chatAiService;
     }
@@ -18,7 +18,7 @@ public class ChatbotController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Ask([FromBody] ChatRequest request)
+    public async Task<IActionResult> Ask([FromBody] PharmacistQueryDto request)
     {
         if (string.IsNullOrEmpty(request?.Question))
         {
