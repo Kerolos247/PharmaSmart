@@ -48,6 +48,14 @@ namespace WebApplication4.Infrastructure.Inventory_Component
             _context.Inventories.Update(item);
             return Task.CompletedTask;
         }
+        public async Task<List<Inventory>> GetLowStockAsync(int threshold = 20)
+        {
+            return await _context.Inventories
+                .Where(i => i.Quantity <= threshold) 
+                .Include(i => i.Medicine)
+                .AsNoTracking()
+                .ToListAsync();
+        }
         public async Task<Inventory> GetByMedicineIdWithLockAsync(int medicineId)
         {
             return await _context.Inventories

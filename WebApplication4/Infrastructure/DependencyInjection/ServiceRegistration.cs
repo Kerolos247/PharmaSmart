@@ -22,6 +22,8 @@ using WebApplication4.Infrastructure.Patient_Component;
 using WebApplication4.Infrastructure.Prescription_Component;
 using WebApplication4.Infrastructure.PrescriptionUpload_Component;
 using WebApplication4.Infrastructure.Supplier_Component;
+using WebApplication4.Application.Common.Services;
+using WebApplication4.Infrastructure.BackgroundJobs;
 
 namespace WebApplication4.Infrastructure.DependencyInjection
 {
@@ -44,12 +46,17 @@ namespace WebApplication4.Infrastructure.DependencyInjection
             services.AddScoped<IFeedBackService, FeedBackService>();
             services.AddScoped<ISentimentService, SentimentService>();
             services.AddScoped<IPharmacistClinicalAssistantService, FdaDrugRagService>();
-           
+            services.AddTransient<INotifierService, NotifierService>();
             services.AddHttpClient<IPharmasmartAiService, PharmasmartAiService>(client =>
             {
                 client.BaseAddress = new Uri("https://lynelle-coyish-unfrivolously.ngrok-free.dev");
                 client.Timeout = TimeSpan.FromSeconds(30); 
             });
+
+            services.AddScoped<IShortageReportTask, ShortageReportTask>();
+
+           
+            services.AddHostedService<PharmacyHourlyCheckService>();
 
 
             services.AddScoped<IMedicineRepo, MedicineRepo>();
