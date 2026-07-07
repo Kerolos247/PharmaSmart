@@ -5,7 +5,9 @@ using WebApplication4.Application.Prescription_Component.Prescription;
 using WebApplication4.Domain.IRepository;
 using WebApplication4.Application.Medcine_Component.Medcine;
 using WebApplication4.Domain.Models;
+using WebApplication4.Domain.Enums;
 using WebApplication4.Application.Common.Services;
+using Microsoft.EntityFrameworkCore;
 public class PrescriptionService : IPrescriptionService
 {
      private readonly IUnitOfWork _uow;
@@ -127,7 +129,11 @@ public class PrescriptionService : IPrescriptionService
                   return Result<ResponseCostDto>.Failure("Prescription not found");
 
 
-              var notesList = prescription.Notes
+              if(prescription.Status == PrescriptionStatus.Paid)
+                return Result<ResponseCostDto>.Failure("Prescription is already paid");
+
+
+            var notesList = prescription.Notes
                   .Split(',')
                   .Select(n => n.Trim())
                   .ToList();
@@ -164,10 +170,10 @@ public class PrescriptionService : IPrescriptionService
                   var inventory = await _uow.Inventories.GetByMedicineIdWithLockAsync(med.MedicineId);
 
 
-                 
-            
+                //await Task.Delay(3000);
 
-                  if (inventory == null || inventory.Quantity < requiredQty)
+
+                if (inventory == null || inventory.Quantity < requiredQty)
                   {
                      
                       await _uow.RollbackAsync();
@@ -209,12 +215,19 @@ public class PrescriptionService : IPrescriptionService
                   operation = true
               });
           }
+          catch (DbUpdateConcurrencyException ex)
+          {
+              await _uow.RollbackAsync();
+              return Result<ResponseCostDto>.Failure("Concurrency conflict detected. The prescription has been modified or paid by another user.");
+          }
           catch (Exception ex)
           {
               await _uow.RollbackAsync();
               return Result<ResponseCostDto>.Failure($"Payment failed:");
           }
-      }
+          
+
+    }
      public async Task<int> GetPharmacistsCount()
      {
          return await _uow.Prescriptions.GetPharmacistsCount();

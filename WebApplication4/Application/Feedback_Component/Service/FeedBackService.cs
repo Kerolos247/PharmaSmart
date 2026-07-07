@@ -4,6 +4,7 @@ using WebApplication4.Application.Patient_Component.Patient;
 using WebApplication4.Application.Feedback_Component.IService;
 using WebApplication4.Application.Common.Interfaces;
 using WebApplication4.Application.Feedback_Component.IService;
+using WebApplication4.Domain.Enums;
 
 namespace WebApplication4.Application.Feedback_Component.Service
 {
@@ -27,6 +28,7 @@ namespace WebApplication4.Application.Feedback_Component.Service
                     Address = feedBack.Address,
                     PhoneNumber = feedBack.PhoneNumber,
                     Notes = feedBack.Notes,
+                    ComplaintClassification = feedBack.ComplaintClassification,
                     feedbackSentiment = feedBack.feedbackSentiment,
                     CreatedAt = DateTime.Now
                 };
@@ -54,6 +56,7 @@ namespace WebApplication4.Application.Feedback_Component.Service
                     PatientName = f.PatientName,
                     Address = f.Address,
                     PhoneNumber = f.PhoneNumber,
+                    ComplaintClassification= f.ComplaintClassification,
                     Notes = f.Notes,
                     feedbackSentiment = f.feedbackSentiment
 

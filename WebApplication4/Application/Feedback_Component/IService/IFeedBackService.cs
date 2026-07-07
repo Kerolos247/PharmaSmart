@@ -1,6 +1,7 @@
 ﻿using WebApplication4.Application.Common.Results;
 using WebApplication4.Application.Patient_Component.Patient;
 using WebApplication4.Domain.Models;
+using WebApplication4.Domain.Enums;
 namespace WebApplication4.Application.Feedback_Component.IService
 {
     public interface IFeedBackService

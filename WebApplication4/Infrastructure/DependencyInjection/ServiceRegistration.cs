@@ -1,7 +1,6 @@
 ﻿using WebApplication4.Application.Auth_Component.IService;
 using WebApplication4.Application.Category_Component.Category;
 using WebApplication4.Application.ChatAi_Component.IService;
-using WebApplication4.Application.Common.IServices;
 using WebApplication4.Application.Common.Validation;
 using WebApplication4.Application.Feedback_Component.IService;
 using WebApplication4.Application.Feedback_Component.Service;
@@ -47,6 +46,8 @@ namespace WebApplication4.Infrastructure.DependencyInjection
             services.AddScoped<ISentimentService, SentimentService>();
             services.AddScoped<IPharmacistClinicalAssistantService, FdaDrugRagService>();
             services.AddTransient<INotifierService, NotifierService>();
+           
+            services.AddHttpClient<IComplaintClassificationService, ComplaintClassificationService>();
             services.AddHttpClient<IPharmasmartAiService, PharmasmartAiService>(client =>
             {
                 client.BaseAddress = new Uri("https://lynelle-coyish-unfrivolously.ngrok-free.dev");

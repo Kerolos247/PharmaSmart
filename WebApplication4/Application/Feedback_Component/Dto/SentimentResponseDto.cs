@@ -1,4 +1,4 @@
-﻿namespace WebApplication4.Application.Common.Dtos.SentimentModel
+﻿namespace WebApplication4.Application.Feedback_Component.Dto
 {
     public class SentimentResponseDto
     {

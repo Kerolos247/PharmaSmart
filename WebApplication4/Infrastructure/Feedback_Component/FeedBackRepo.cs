@@ -2,6 +2,7 @@
 using WebApplication4.Domain.IRepository;
 using WebApplication4.Domain.Models;
 using WebApplication4.Infrastructure.DB;
+using WebApplication4.Domain.Enums;
 namespace WebApplication4.Infrastructure.Feedback_Component
 {
     public class FeedBackRepo : IFeedBackRepo

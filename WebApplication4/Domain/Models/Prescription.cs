@@ -1,14 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using WebApplication4.Domain.Enums;
 namespace WebApplication4.Domain.Models
 {
-    public enum PrescriptionStatus
-    {
-        Unpaid,
-        Paid,
-        Cancelled,
-        PickedUp
-    }
+   
     public class Prescription
     {
         public int PrescriptionId { get; set; }
@@ -29,6 +24,8 @@ namespace WebApplication4.Domain.Models
         public ICollection<PrescriptionItem> PrescriptionItems { get; set; }
 
         public PrescriptionStatus Status { get; set; } = PrescriptionStatus.Unpaid;
+        [Timestamp]
+        public byte[]? RowVersion { get; set; }
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using WebApplication4.Domain.Models;
+using WebApplication4.Domain.Enums;
 namespace WebApplication4.Application.Patient_Component.Patient
 {
     public class PatientFeedbackDto
@@ -21,5 +22,23 @@ namespace WebApplication4.Application.Patient_Component.Patient
         public string Notes { get; set; }
 
         public FeedbackSentiment feedbackSentiment { get; set; }
+
+       
+        public ComplaintClassification ComplaintClassification { get; set; }
+    }
+
+   
+    public enum ComplaintClassification
+    {
+        AIChatbotIssues,       // "AI Chatbot Issues"
+        WebsiteAndAppIssues,   // "Website & App Issues"
+        PharmacistBehavior,    // "Pharmacist Behavior"
+        CustomerService,       // "Customer Service"
+        PriceAndOffers,        // "Price & Offers"
+        MedicineIssues,        // "Medicine Issues"
+        DeliveryIssues,        // "Delivery Issues"
+        ReturnsAndRefunds,     // "Returns & Refunds"
+        MedicalInsurance,      // "Medical Insurance"
+        Other                  // "Other"
     }
 }

@@ -1,4 +1,5 @@
 ﻿using WebApplication4.Domain.Models;
+using WebApplication4.Domain.Enums;
 namespace WebApplication4.Domain.IRepository
 {
     public interface IFeedBackRepo
