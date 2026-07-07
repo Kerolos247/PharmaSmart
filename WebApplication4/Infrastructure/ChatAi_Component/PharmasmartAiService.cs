@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using WebApplication4.Application.ChatAi_Component.ChatAi;
 using WebApplication4.Application.ChatAi_Component.IService;
 
@@ -14,36 +15,38 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
     {
         private readonly HttpClient _httpClient;
 
-       
-        private const string BaseUrl = "https://aya946-egyptian-medical.hf.space";
-
-       
-        private const string HuggingFaceToken = "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";
-
-        public PharmasmartAiService(HttpClient httpClient)
+        public PharmasmartAiService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(BaseUrl);
 
-           
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HuggingFaceToken);
+            // الاعتماد الكلي على الـ Configuration لقراءة الـ BaseUrl والـ Token
+            var baseUrl = configuration["HuggingFaceSettings:BaseUrl"];
+            var huggingFaceToken = configuration["HuggingFaceSettings:Token"];
+
+            if (!string.IsNullOrEmpty(baseUrl))
+            {
+                _httpClient.BaseAddress = new Uri(baseUrl);
+            }
+
+            // إضافة الـ Token للـ Headers لو موجود
+            if (!string.IsNullOrEmpty(huggingFaceToken))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", huggingFaceToken);
+            }
         }
 
-       
         public async Task<string> StreamChatAsync(string userMessage)
         {
-           
             var formData = new Dictionary<string, string>
             {
                 { "text", userMessage }
             };
 
-           
             var content = new FormUrlEncodedContent(formData);
 
             var response = await _httpClient.PostAsync("/api/chat-text", content);
 
-            
             response.EnsureSuccessStatusCode();
 
             try
@@ -53,7 +56,6 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
             }
             catch
             {
-               
                 return await response.Content.ReadAsStringAsync();
             }
         }
@@ -64,13 +66,10 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
 
             var streamContent = new StreamContent(audioStream);
 
-           
             streamContent.Headers.ContentType = new MediaTypeHeaderValue("audio/wav");
 
-           
             content.Add(streamContent, "file", fileName);
 
-         
             var response = await _httpClient.PostAsync("/api/chat-voice", content);
 
             response.EnsureSuccessStatusCode();
@@ -86,5 +85,4 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
             }
         }
     }
-
 }

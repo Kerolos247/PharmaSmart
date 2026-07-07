@@ -170,7 +170,7 @@ public class PrescriptionService : IPrescriptionService
                   var inventory = await _uow.Inventories.GetByMedicineIdWithLockAsync(med.MedicineId);
 
 
-                //await Task.Delay(3000);
+               
 
 
                 if (inventory == null || inventory.Quantity < requiredQty)

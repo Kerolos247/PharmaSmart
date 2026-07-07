@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration; // تم التأكيد على الـ namespace ده
 using WebApplication4.Application.ChatAi_Component.Dto;
 using WebApplication4.Application.ChatAi_Component.IService;
 using WebApplication4.Infrastructure.SemanticCashe;
@@ -16,16 +17,20 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        private readonly SemanticCacheService _semanticCache; 
+        private readonly SemanticCacheService _semanticCache;
 
-        private readonly string _fastApiAskUrl = "https://kerolos1-fda-drug-rag-api.hf.space/ask";
-        private readonly string _fastApiEmbedUrl = "https://kerolos1-fda-drug-rag-api.hf.space/embed";
+        private readonly string _fastApiAskUrl;
+        private readonly string _fastApiEmbedUrl;
 
         public FdaDrugRagService(IHttpClientFactory httpClientFactory, IConfiguration configuration, SemanticCacheService semanticCache)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
             _semanticCache = semanticCache;
+
+            // القراءة بالكامل من ملف appsettings.json بدون أي روابط ثابتة داخل الكود
+            _fastApiAskUrl = _configuration["FdaDrugRagSettings:AskUrl"];
+            _fastApiEmbedUrl = _configuration["FdaDrugRagSettings:EmbedUrl"];
         }
 
         public async Task<string> Ask(string question)
@@ -41,7 +46,6 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
                     return "فشل في توليد متجهات المعنى للسؤال.";
                 }
 
-               
                 string cachedAnswer = _semanticCache.SearchInMemoryCache(questionVector);
                 if (!string.IsNullOrEmpty(cachedAnswer))
                 {
@@ -73,7 +77,6 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
 
                 if (result != null && !string.IsNullOrEmpty(result.Answer))
                 {
-                   
                     _semanticCache.SaveToMemoryCache(question, questionVector, finalAnswer);
                 }
 
