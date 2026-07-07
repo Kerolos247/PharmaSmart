@@ -71,25 +71,22 @@ The backend is an enterprise-grade **ASP.NET Core MVC** application built on **C
 * **Infrastructure Layer** — Handles external concerns: data persistence via Entity Framework Core, external API integrations, and the security/authentication implementation.
 * **Presentation Layer (MVC)** — The user-facing layer, structured into modular components that handle HTTPS requests, enforce role-based access control, and render views.
 
-#### 🧩 Core Backend Components
+#### 🧩 Core Backend System Components
 
-* **Patient Lifecycle Management** — Comprehensive patient profiles with optimized search and full CRUD workflows.
-* **Prescription & Fulfillment** — Tracks, updates, and searches medical prescriptions, with a dedicated checkout flow for fulfillment and payment.
-* **Cloud-Decoupled Media Storage** — Handles prescription image uploads; transactional metadata is persisted in SQL Server while physical assets are offloaded to **Cloudinary** via background processes.
-* **Catalog & Supplier Intake** — Links each medicine entry to its vendor and requires an initial batch shipment intake to populate live inventory counts when a new medicine is added.
-* **Inventory & Concurrency Control:**
-  * **Real-Time Stock Management** — Every sale or manual stock adjustment updates live inventory immediately, enforcing fulfillment rules.
-  * **Pessimistic Concurrency Locking** — Uses SQL Server row-level locks during checkout to prevent race conditions such as double-selling or negative stock when multiple pharmacists dispense the same medicine concurrently.
-* **Custom Semantic Caching Component** — Native C# middleware that intercepts duplicate queries, calls the FastAPI embedding endpoint, and caches semantically similar prior requests to reduce LLM token overhead and API latency.
-* **Automated Operational Alerting:**
-  * **Low-Stock Alerts** — Background workers send immediate notification emails via **Brevo** when a medicine's stock drops below its critical threshold.
-  * **Weekly Shortage Reports** — A scheduled background service compiles and emails a weekly summary of depleted or critically low-stock medicines.
-
-#### 🛠️ Core Backend Tech Stack
-* **Framework:** .NET Core / ASP.NET Core MVC
-* **Data Access & ORM:** Entity Framework Core (explicit transactions and row locks)
-* **Primary Database:** SQL Server (relational data, transaction logs, row-level locking)
-* **Third-Party Integrations:** Cloudinary (image hosting), Brevo (transactional email & reporting)
+* **Patient Lifecycle Management:** Manages comprehensive patient database profiles, executing highly optimized dynamic search queries alongside complete, secure CRUD (Create, Read, Update, Delete) business workflows.
+* **Prescription Tracking & Fulfillment:** Coordinates the registration, tracking, auditing, and multi-criteria search parameters of official medical prescriptions. Includes a dedicated transactional checkout processing sub-system tailored for internal medical fulfillment and automated payment handling.
+* **Cloud-Decoupled Online Prescription Media Storage:** Enables patients to dynamically upload digital or handwritten prescription images via the web portal. To protect web server throughput, transactional metadata is securely persisted within the SQL Server relational instance, while heavy physical assets are synchronously offloaded to **Cloudinary** via background processing pipelines to preserve database performance.
+* **Supplier Lifecycle Component:** Tracks extensive B2B vendor and distributor records, facilitating rapid supplier lookups and full standalone CRUD operations to streamline logistics and procurement workflows.
+* **Granular Medicine Catalog Component:** Manages the full pharmaceutical registry (Generic names, Barcodes, Categories, and Dosage forms). Each medication profile is explicitly mapped to its active vendor, ensuring structured relational constraints across the entire domain dataset.
+* **Unified Batch Intake Integration:** Enforces an atomic transactional boundary across the medication lifecycle. A new product cannot be registered into the catalog without instantly defining and executing its initial batch shipment intake metrics (Lot numbers, Expiration tracking dates, and Initial quantities) to populate live database stock dynamically.
+* **Inventory & Concurrency Control (Race Condition Mitigation):** 
+  * **Real-time Stock Management:** Every validated sale, medicine dispense transaction, or manual administrative adjustment directly depletes or mutates live database stock, actively enforcing strict business fulfillment rules.
+  * **Pessimistic Concurrency Locking:** Engineered specifically to handle high-concurrency environments (e.g., multiple pharmacists attempting to dispense the exact same medicine simultaneously). By explicitly triggering row-level isolation blocks within SQL Server during live checkout sessions (`SELECT ... WITH (XLOCK, ROWLOCK)`), it completely eliminates race conditions, eliminating double-selling or negative-stock scenarios.
+* **Custom Semantic Caching Middleware:** Implemented natively within the C# application codebase as an intelligent interception layer. It converts outgoing queries via the FastAPI embedding service and evaluates them against an in-memory repository (`IMemoryCache`). If semantically identical queries exist, it fetches cached historical responses, cutting redundant LLM token overhead, slashing API response latency, and preventing microservice compute exhaustion.
+* **Customer Complaints & Feedback AI Component:** An end-to-end user feedback intake pipeline embedded within the patient portal. Submissions are securely piped to a fine-tuned BERT classification microservice that performs automated text preprocessing, Multi-Class Sentiment Analysis, and Topic Classification to route the issue into specific departments (e.g., *Customer Service, Medical Staff, Billing, Delivery delay*) for administrative analytics.
+* **Automated Operational Awareness & Alerting:** Utilizes managed background workers (`IHostedService`) coordinated with **Brevo (External SMTP)** to guarantee continuous administrative oversight:
+  * **Immediate Low-Stock Alerts:** Automatically dispatches urgent notification emails to the administration the exact millisecond a medicine's stock drops below its critical threshold during a transaction.
+  * **Weekly Shortage Reporting:** A scheduled background service scans database records to compile an automated weekly breakdown of depleted or critically low-stock medicines, delivering it directly to the admin's inbox.
 
 ---
 
