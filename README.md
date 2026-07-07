@@ -7,14 +7,14 @@ Built to help pharmacists manage medications, prescriptions, patients, and suppl
 
 ## 🚀 Key Features
 
-### 🔐 Authentication & Security
-- Secure authentication using ASP.NET Identity
-- Role-based authorization (Admin, Pharmacist) to enforce secure access control and separation of responsibilities
-- Password reset via email (Forgot & Reset Password)
-- Brute-force protection with temporary account lockout
-- Email alerts for suspicious login attempts
-- Strong password policies and input validation
-- All actions linked to the authenticated pharmacist
+### 🔐 Authentication, Security & Rate Limiting
+
+The system enforces strict corporate-level security patterns within the **Infrastructure Layer** to ensure data integrity, mitigate automated attacks, and protect user accounts:
+
+* **Context-Aware Brute-Force & Device Protection:** Implements a sophisticated security filter that monitors authentication patterns. If a device repeatedly enters incorrect passwords while attempting to log into a valid, registered account, the system triggers a dynamic, temporary device block to halt the attack.
+* **IP & Device-Level Rate Limiting:** Rate limiters restrict excessive authentication requests at both the network and device levels. This entirely mitigates credential stuffing and distributed brute-force attacks before they hit the core business logic.
+* **Secure Password Recovery Workflow:** Features a secure "Forgot Password" lifecycle. It integrates **Brevo** as an external SMTP service to securely dispatch time-bound verification and password reset tokens to users.
+* **Architectural Separation:** All core security frameworks and persistence logic reside cleanly inside the **Infrastructure Layer**, while specialized authorization and role-limiting filters are applied directly at the **Presentation Layer (MVC)** to safeguard endpoints.
 
 ---
 
