@@ -128,3 +128,10 @@ The platform follows a polyglot architecture, balancing high-throughput transact
 * **Microsoft.Extensions.Caching (`IMemoryCache`)** — In-memory storage backing the custom semantic cache.
 * **JavaScript (ES6+)** — Powers responsive UI behavior, client-side validation, and asynchronous requests to backend controllers.
 * **Groq API** — High-performance inference platform powering low-latency Llama 3.3 response generation for the AI consultation and customer support microservices.
+
+
+## 🏗️ C4 Architecture Diagram
+
+The complete C4 architecture diagram illustrating the system's architecture, component relationships, and communication flow can be viewed here:
+
+👉 [View the C4 Architecture Diagram](https://github.com/Kerolos247/MVC-Pharmacy/blob/master/Diagram-C4.png)
