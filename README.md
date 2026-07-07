@@ -79,6 +79,9 @@ The backend is an enterprise-grade **ASP.NET Core MVC** application built on **C
 * **Supplier Lifecycle Component:** Tracks extensive B2B vendor and distributor records, facilitating rapid supplier lookups and full standalone CRUD operations to streamline logistics and procurement workflows.
 * **Granular Medicine Catalog Component:** Manages the full pharmaceutical registry (Generic names, Barcodes, Categories, and Dosage forms). Each medication profile is explicitly mapped to its active vendor, ensuring structured relational constraints across the entire domain dataset.
 * **Unified Batch Intake Integration:** Enforces an atomic transactional boundary across the medication lifecycle. A new product cannot be registered into the catalog without instantly defining and executing its initial batch shipment intake metrics (Lot numbers, Expiration tracking dates, and Initial quantities) to populate live database stock dynamically.
+
+* **Comprehensive DTO Validation Layer:** Every request DTO is secured through server-side validation using ASP.NET Core Data Annotations, enforcing required fields, data formats, length constraints, file validation, and business input rules before any request reaches the application's business logic.
+  
 * **Inventory & Concurrency Control (Race Condition Mitigation):** 
   * **Concurrent Inventory Management:** Every validated sale, medicine dispense transaction, or manual administrative adjustment directly depletes or mutates live database stock, actively enforcing strict business fulfillment rules.
   * **Dual-Strategy Concurrency Control Layer (Race Condition Mitigation):** To maximize system throughput while maintaining absolute data integrity, the system splits its concurrency management into two distinct strategies based on contention probability:
