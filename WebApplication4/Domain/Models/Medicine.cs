@@ -19,6 +19,6 @@
 
         // Relations
         public Inventory Inventory { get; set; }
-        public ICollection<PrescriptionItem> PrescriptionItems { get; set; }
+        //public ICollection<PrescriptionItem> PrescriptionItems { get; set; }
     }
 }

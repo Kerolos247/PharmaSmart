@@ -18,10 +18,7 @@ namespace WebApplication4.Infrastructure.DB
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Prescription> Prescriptions { get; set; }
-        public DbSet<PrescriptionItem> PrescriptionItems { get; set; }
-        public DbSet<SupplierOrder> SupplierOrders { get; set; }
-        public DbSet<SupplierOrderItem> SupplierOrderItems { get; set; }
-
+       
         public DbSet<PrescriptionUpload> PrescriptionsUpload { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,6 +35,11 @@ namespace WebApplication4.Infrastructure.DB
                 .WithOne(i => i.Medicine)
                 .HasForeignKey<Inventory>(i => i.MedicineId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Medicine>()
+                .Property(m => m.Price)
+                .HasPrecision(18, 2);
 
 
             modelBuilder.Entity<Category>()
@@ -61,25 +63,7 @@ namespace WebApplication4.Infrastructure.DB
                 .OnDelete(DeleteBehavior.Restrict);
 
 
-            modelBuilder.Entity<SupplierOrder>()
-                .HasMany(o => o.Items)
-                .WithOne(i => i.SupplierOrder)
-                .HasForeignKey(i => i.SupplierOrderId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-
-            modelBuilder.Entity<Prescription>()
-                .HasMany(p => p.PrescriptionItems)
-                .WithOne(i => i.Prescription)
-                .HasForeignKey(i => i.PrescriptionId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-
-            modelBuilder.Entity<Medicine>()
-                .HasMany(m => m.PrescriptionItems)
-                .WithOne(i => i.Medicine)
-                .HasForeignKey(i => i.MedicineId)
-                .OnDelete(DeleteBehavior.Restrict);
+          
         }
 
 

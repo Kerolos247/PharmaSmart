@@ -23,7 +23,6 @@ namespace WebApplication4.Infrastructure.Prescription_Component
             return await _context.Prescriptions
                 .Include(p => p.Patient)
                 .Include(p => p.Pharmacist)
-                .Include(p => p.PrescriptionItems)
                 .FirstOrDefaultAsync(p => p.PrescriptionId == id);
         }
 
@@ -31,7 +30,6 @@ namespace WebApplication4.Infrastructure.Prescription_Component
         {
             return await _context.Prescriptions
                 .Include(p => p.Patient)
-                .Include(p => p.PrescriptionItems)
                 .AsNoTracking()
                 .ToListAsync();
         }

@@ -20,8 +20,8 @@ namespace WebApplication4.Domain.Models
         public string PharmacistId { get; set; }
         public Pharmacist Pharmacist { get; set; }
 
-        // Items
-        public ICollection<PrescriptionItem> PrescriptionItems { get; set; }
+        //// Items
+        //public ICollection<PrescriptionItem> PrescriptionItems { get; set; }
 
         public PrescriptionStatus Status { get; set; } = PrescriptionStatus.Unpaid;
         [Timestamp]
