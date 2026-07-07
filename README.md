@@ -1,7 +1,6 @@
-# 💊 Pharmacy Management System
+# 💊 PharmaSmart — Pharmacy Management System
 
-A full-featured Pharmacy Management System that simulates real-world pharmacy operations.  
-Built to help pharmacists manage medications, prescriptions, patients, and suppliers efficiently, with a strong focus on **security, performance, and scalability**.
+An enterprise-grade Pharmacy Management System that models real-world pharmacy operations end to end. PharmaSmart helps pharmacists manage medications, prescriptions, patients, and suppliers efficiently, with a design that prioritizes **security, performance, and scalability**.
 
 ---
 
@@ -9,133 +8,118 @@ Built to help pharmacists manage medications, prescriptions, patients, and suppl
 
 ### 🔐 Authentication, Security & Rate Limiting
 
-The system enforces strict corporate-level security patterns within the **Infrastructure Layer** to ensure data integrity, mitigate automated attacks, and protect user accounts:
+The Infrastructure Layer implements a set of security controls designed to protect user accounts and preserve data integrity against automated and distributed attacks:
 
-* **Context-Aware Brute-Force & Device Protection:** Implements a sophisticated security filter that monitors authentication patterns. If a device repeatedly enters incorrect passwords while attempting to log into a valid, registered account, the system triggers a dynamic, temporary device block to halt the attack.
-* **IP & Device-Level Rate Limiting:** Rate limiters restrict excessive authentication requests at both the network and device levels. This entirely mitigates credential stuffing and distributed brute-force attacks before they hit the core business logic.
-* **Secure Password Recovery Workflow:** Features a secure "Forgot Password" lifecycle. It integrates **Brevo** as an external SMTP service to securely dispatch time-bound verification and password reset tokens to users.
-* **Architectural Separation:** All core security frameworks and persistence logic reside cleanly inside the **Infrastructure Layer**, while specialized authorization and role-limiting filters are applied directly at the **Presentation Layer (MVC)** to safeguard endpoints.
-
----
-
-### 🤖 AI-Powered Features
-- **Sentiment Analysis (NLP)**  
-  Analyzes customer feedback using a custom NLP model to detect positive and negative reviews, enabling better decision-making and service improvement
-
-- **Performance Optimization**  
-  Implemented in-memory caching to reduce repeated NLP processing and improve response time
-
----
-### 🤖 AI Assistant (Mistral Integration)
-
-Integrated a conversational AI assistant powered by **Mistral AI**, connected through a **FastAPI service** that communicates seamlessly with the **ASP.NET Core backend**.
-
-#### 🧠 Pharmacist Support System
-Enables pharmacists to ask medical-related queries, retrieve drug information, and receive intelligent, AI-driven suggestions in real time.
-
-#### 🔗 Backend Communication (C# ↔ Python)
-Implemented a REST-based communication layer between the **C# application** and the **FastAPI AI service**, ensuring efficient request/response handling and smooth integration.
-
-#### 💡 Use Cases
-- Drug usage guidance  
-- General medical inquiries  
-- Decision-making assistance within the system
----
-
-  ### 🤖 AI Model Details
-
-- **Model:** Arabic Sentiment Analysis (Fine-Tuned BERT)
-- **Source:** https://huggingface.co/kerolos1/analysis-of-Egyptian-sentiments
-
-- **Description:**  
-  A fine-tuned transformer-based model built on AraBERT architecture, designed to classify Arabic text into sentiment categories (positive / negative).  
-  The model is adapted from a pre-trained Arabic sentiment model and further fine-tuned to improve accuracy on domain-specific data. :contentReference[oaicite:0]{index=0}
-
-- **How it works:**  
-  The model processes customer feedback and returns:
-  - Sentiment label (Positive / Negative)
-  - Confidence score
-
-  📸 **Model in Action:**
-  ![Sentiment Analysis](https://github.com/Kerolos247/MVC-Pharmacy/blob/master/Screenshot%202026-03-25%20032648.png)
+* **Context-Aware Brute-Force & Device Protection** — A dedicated security filter monitors authentication attempts and applies a dynamic, temporary device block when repeated failed logins are detected against a valid, registered account.
+* **IP & Device-Level Rate Limiting** — Rate limiters constrain authentication requests at both the network and device level, reducing exposure to credential stuffing and distributed brute-force attempts before they reach core business logic.
+* **Secure Password Recovery Workflow** — A "Forgot Password" flow issues time-bound verification and reset tokens, delivered via **Brevo** as the external SMTP provider.
+* **Architectural Separation** — Security frameworks and persistence logic live in the **Infrastructure Layer**, while authorization and role-based access filters are enforced at the **Presentation Layer (MVC)**, keeping each concern in its proper place.
 
 ---
 
-### 💊 Medication Management
-- Full CRUD operations for medications
-- Expiration tracking and validation
-- Low-stock and near-expiry alerts
+### 🤖 AI-Powered Features & Microservices Architecture
+
+Computationally intensive AI workloads are isolated from core pharmacy operations in a dedicated **AI Microservices Layer**, built with **FastAPI (Python)** and containerized with **Docker**. Each microservice follows the single-responsibility principle, communicates with the ASP.NET MVC core exclusively over **RESTful APIs**, and is deployed on **Hugging Face**.
+
+#### 1. Pharmacist Consultation Service (Stateful RAG Microservice)
+Provides evidence-based pharmaceutical consultation through a stateful **Retrieval-Augmented Generation (RAG)** pipeline backed by a persistent vector knowledge base.
+
+* **FDA Semantic Knowledge Base** — Converts official FDA pharmaceutical documentation into vector embeddings using **Sentence Transformers**.
+* **Vector Storage** — Stores and indexes embeddings in a **Qdrant Vector Database** for high-performance semantic similarity search.
+* **Retrieval Pipeline:**
+  1. Receive the pharmacist's question.
+  2. Generate a semantic embedding for the query.
+  3. Search Qdrant for the most relevant FDA passages.
+  4. Rerank candidates using **FlashRank** to improve retrieval precision.
+  5. Build an augmented prompt from the reranked context.
+  6. Generate a context-grounded answer using **Llama 3.3** via the **Groq API**.
+  7. Return the answer together with its supporting source evidence.
+* **Embedding API** — Exposes an embedding endpoint consumed by the ASP.NET MVC application to power the custom Semantic Cache.
+
+#### 2. Customer Service Voice Assistant (Stateless AI Microservice)
+An intelligent, stateless assistant that handles operational and customer-service inquiries on the web portal.
+
+* **Egyptian Arabic Optimization** — Tuned to understand spoken Egyptian Arabic, allowing patients to interact naturally in their local dialect.
+* **Speech-to-Text (STT)** — Transcribes Egyptian Arabic audio using **Whisper**.
+* **Response Generation** — Produces natural-language replies with **Llama** and converts them to speech via Text-to-Speech.
+* **Supported Queries** — Branch locations, contact details, business hours, available services, site navigation help, and general support.
+* **Horizontal Scalability** — Runs as a stateless service, allowing scaling through simple container replication.
+
+#### 3. Sentiment & Complaint Classification Service (Stateless AI Microservice)
+A text-analysis pipeline embedded in the customer feedback flow to monitor service quality.
+
+* **BERT Classification Model** — Routes submissions to a fine-tuned BERT model for preprocessing and text understanding.
+* **Dual Classification** — Performs sentiment analysis (positive/negative) alongside topic classification.
+* **Structured Output** — Maps complaints to operational categories (e.g., *delivery delay, missing medication, incorrect order, staff behavior, website issues, payment problems*) and returns them as structured JSON to the .NET core application.
+
+#### 4. Custom C# Semantic Caching Component
+A hybrid caching layer built natively into the C# codebase to optimize AI-layer performance.
+
+* **Token & Cost Reduction** — Intercepts outgoing AI queries and checks for semantically similar historical requests.
+* **Latency Reduction** — Serves cached responses for semantically matching queries, cutting redundant LLM token usage, API latency, and unnecessary microservice compute.
+* **Performance Optimization** — Uses in-memory caching to reduce repeated NLP processing and improve response times.
 
 ---
 
-### 📝 Prescription Management
-- Add, search, and dispense prescriptions
-- Online prescription upload (Cloud-based storage)
-- Pagination for efficient data handling
-- Automatic pricing calculation with dynamic discounts
+### 🖥️ Core Backend & Architecture (.NET)
+
+The backend is an enterprise-grade **ASP.NET Core MVC** application built on **Clean Architecture** principles, ensuring maintainability, separation of concerns, and testability.
+
+#### 🏗️ Architectural Layers
+* **Domain Layer** — Core business entities, domain logic, and custom domain exceptions. Fully independent of external frameworks, databases, or UI concerns.
+* **Application Layer** — Orchestrates use cases, encapsulates business rules, and defines DTOs and interface abstractions used across the application.
+* **Infrastructure Layer** — Handles external concerns: data persistence via Entity Framework Core, external API integrations, and the security/authentication implementation.
+* **Presentation Layer (MVC)** — The user-facing layer, structured into modular components that handle HTTPS requests, enforce role-based access control, and render views.
+
+#### 🧩 Core Backend Components
+
+* **Patient Lifecycle Management** — Comprehensive patient profiles with optimized search and full CRUD workflows.
+* **Prescription & Fulfillment** — Tracks, updates, and searches medical prescriptions, with a dedicated checkout flow for fulfillment and payment.
+* **Cloud-Decoupled Media Storage** — Handles prescription image uploads; transactional metadata is persisted in SQL Server while physical assets are offloaded to **Cloudinary** via background processes.
+* **Catalog & Supplier Intake** — Links each medicine entry to its vendor and requires an initial batch shipment intake to populate live inventory counts when a new medicine is added.
+* **Inventory & Concurrency Control:**
+  * **Real-Time Stock Management** — Every sale or manual stock adjustment updates live inventory immediately, enforcing fulfillment rules.
+  * **Pessimistic Concurrency Locking** — Uses SQL Server row-level locks during checkout to prevent race conditions such as double-selling or negative stock when multiple pharmacists dispense the same medicine concurrently.
+* **Custom Semantic Caching Component** — Native C# middleware that intercepts duplicate queries, calls the FastAPI embedding endpoint, and caches semantically similar prior requests to reduce LLM token overhead and API latency.
+* **Automated Operational Alerting:**
+  * **Low-Stock Alerts** — Background workers send immediate notification emails via **Brevo** when a medicine's stock drops below its critical threshold.
+  * **Weekly Shortage Reports** — A scheduled background service compiles and emails a weekly summary of depleted or critically low-stock medicines.
+
+#### 🛠️ Core Backend Tech Stack
+* **Framework:** .NET Core / ASP.NET Core MVC
+* **Data Access & ORM:** Entity Framework Core (explicit transactions and row locks)
+* **Primary Database:** SQL Server (relational data, transaction logs, row-level locking)
+* **Third-Party Integrations:** Cloudinary (image hosting), Brevo (transactional email & reporting)
 
 ---
 
-### 🧑‍🤝‍🧑 Patient & Supplier Management
-- Manage patients and suppliers with full CRUD functionality
+## 🛠️ Detailed Technology Stack
 
----
+The platform follows a polyglot architecture, balancing high-throughput transactional integrity with efficient machine learning inference.
 
-### 📊 Dashboard
-- Real-time statistics for patients, medications, suppliers, and prescriptions
-- Data scoped to the logged-in pharmacist
+### 🖥️ Backend Frameworks & Core Ecosystem
+* **ASP.NET Core 8 (MVC)** — Primary host for the enterprise web engine, providing dependency injection, secure routing, and separation of concerns.
+* **FastAPI (Python 3.11)** — Asynchronous framework powering the AI microservices layer, chosen for its low overhead and native async support.
+* **Docker** — Containerizes each Python AI microservice for environmental isolation and consistent deployment.
 
----
+### 💾 Data Persistence, Querying & Concurrency
+* **Entity Framework Core 8** — ORM managing migrations, Fluent API configuration, and database transactions.
+* **SQL Server** — Relational database engine handling consistent tables, transaction logs, and row-level locks.
+* **LINQ** — Type-safe, compiled queries used in the Application layer for efficient server-side data access.
+* **Qdrant Vector Database** — Stores, indexes, and queries semantic embeddings for the RAG consultation pipeline.
 
-### ⚠️ Smart Validation & Alerts
-- Prevents invalid or expired data
-- System-wide validation and real-time alerts
+### 🔐 Authentication & Identity
+* **ASP.NET Core Identity** — Manages authentication, password hashing, persistent cookies, and role-based access control.
 
----
+### 🤖 Machine Learning, NLP & AI Core
+* **Llama 3.3 (via Groq API)** — Foundational LLM for context-grounded response generation in consultation and support pipelines.
+* **Fine-Tuned BERT** — Task-specific model for sentiment analysis and multi-class complaint classification.
+* **Whisper (OpenAI)** — Automatic speech recognition for transcribing Egyptian Arabic audio input.
+* **Sentence Transformers & PyTorch** — Convert clinical text into semantic vector embeddings.
+* **LangChain & FlashRank** — Orchestrate the RAG execution graph and apply context-aware reranking over retrieved passages.
 
-## 🛠 Tech Stack
-
-- ASP.NET Core (MVC)
-- Entity Framework Core
-- SQL Server
-- LINQ
-- ASP.NET Identity
-- JavaScript
-- FastAPI (Python - AI Integration)
-- Cloudinary (File Uploads)
-- IMemoryCache (Performance Optimization)
-
----
-
-## 🏗 Architecture & Design
-
-- Clean Architecture & MVC Pattern
-- Dependency Injection for loose coupling
-- Scalable and maintainable design
-
----
-
-## 🧩 Design Patterns
-
-- **Repository Pattern & Unit of Work**  
-  To abstract data access logic and manage database transactions efficiently.
-
-- **Strategy Pattern**  
-  For implementing dynamic discount logic with flexible and extensible behavior.
-
-- **Factory Pattern**  
-  For centralized and flexible object creation (e.g., invoice generation).
-
-- **Dependency Injection (DI)**  
-  To achieve loose coupling, improve testability, and enhance maintainability.
-
----
-
-## 🎥 Demo
-
-A working demo showcasing:
-- Password reset workflow
-- Brute-force protection
-- Email notification system
-
-🔗 https://drive.google.com/file/d/14wziabgBlKxHNud8WYIalyb1ykSPFlPR/view?usp=sharing
+### ☁️ Infrastructure & Third-Party Integrations
+* **Cloudinary SDK** — Non-blocking cloud storage for prescription assets, offloaded from the application server.
+* **Brevo API (formerly Sendinblue)** — SMTP provider for token delivery and automated reporting.
+* **Microsoft.Extensions.Caching (`IMemoryCache`)** — In-memory storage backing the custom semantic cache.
+* **JavaScript (ES6+)** — Powers responsive UI behavior, client-side validation, and asynchronous requests to backend controllers.
