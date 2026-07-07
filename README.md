@@ -50,7 +50,7 @@ A text-analysis pipeline embedded in the customer feedback flow to monitor servi
 
 * **BERT Classification Model** — Routes submissions to a fine-tuned BERT model for preprocessing and text understanding.
 * **Dual Classification** — Performs sentiment analysis (positive/negative) alongside topic classification.
-* **Structured Output** — Maps complaints to operational categories (e.g., *delivery delay, missing medication, incorrect order, staff behavior, website issues, payment problems*) and returns them as structured JSON to the .NET core application.
+* **Structured Output** — Maps complaints to operational categories (e.g., Customer Service, Medical Staff,Delivery delay) and returns them as structured JSON to the .NET core application.
 
 #### 4. Custom C# Semantic Caching Component
 A hybrid caching layer built natively into the C# codebase to optimize AI-layer performance.
