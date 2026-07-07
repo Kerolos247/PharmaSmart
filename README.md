@@ -132,6 +132,6 @@ The platform follows a polyglot architecture, balancing high-throughput transact
 
 ## 🏗️ C4 Architecture Diagram
 
-The complete C4 architecture diagram illustrating the system's architecture, component relationships, and communication flow can be viewed here:
+The following C4 diagram provides a high-level overview of the system architecture and interactions between the ASP.NET MVC application, AI microservices, external services, and supporting infrastructure.
 
-👉 [View the C4 Architecture Diagram](https://github.com/Kerolos247/MVC-Pharmacy/blob/master/Diagram-C4.png)
+![C4 Architecture Diagram](Diagram-C4.png)
