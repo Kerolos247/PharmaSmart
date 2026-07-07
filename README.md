@@ -127,3 +127,4 @@ The platform follows a polyglot architecture, balancing high-throughput transact
 * **Brevo API (formerly Sendinblue)** — SMTP provider for token delivery and automated reporting.
 * **Microsoft.Extensions.Caching (`IMemoryCache`)** — In-memory storage backing the custom semantic cache.
 * **JavaScript (ES6+)** — Powers responsive UI behavior, client-side validation, and asynchronous requests to backend controllers.
+* **Groq API** — High-performance inference platform powering low-latency Llama 3.3 response generation for the AI consultation and customer support microservices.
