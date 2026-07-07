@@ -89,8 +89,11 @@ The backend is an enterprise-grade **ASP.NET Core MVC** application built on **C
   * **Pessimistic Locking (High-Contention / General Dispensing):** Engineered for scenarios with a high probability of race conditions—such as multiple pharmacists across different branches simultaneously dispensing the exact same high-demand drug from the same inventory batch. During checkout, the infrastructure layer utilizes EF Core to execute explicit raw SQL row-level hints on SQL Server (`SELECT ... WITH (XLOCK, ROWLOCK)`). This forces concurrent transaction threads to block synchronously until the active checkout commits, entirely eliminating double-selling or negative-stock anomalies.
   
   * **Optimistic Locking (Low-Contention / Multi-Pharmacist Prescription Race):** Applied to scenarios with an extremely low probability of conflict—specifically when two pharmacists accidentally attempt to open and fulfill the exact same customer prescription identifier at the same millisecond. Instead of blocking the database threads with heavy locks, the system utilizes a dedicated concurrency token (`RowVersion` / `Timestamp`). If a conflict occurs during the final saving phase, the database detects the mismatch, rejects the second transaction, and throws a controlled concurrency exception, prompting the user to refresh the stale data without hindering database performance.
+ 
+* **Database Query Optimization:** Frequently queried entities are optimized through strategic SQL indexes and extensive use of Entity Framework Core's `AsNoTracking()` for read-only operations, reducing query overhead and improving data retrieval performance.
+  
 * **Custom Semantic Caching Middleware:** Implemented natively within the C# application codebase as an intelligent interception layer. It converts outgoing queries via the FastAPI embedding service and evaluates them against an in-memory repository (`IMemoryCache`). If semantically identical queries exist, it fetches cached historical responses, cutting redundant LLM token overhead, slashing API response latency, and preventing microservice compute exhaustion.
-* **Customer Complaints & Feedback AI Component:** An end-to-end user feedback intake pipeline embedded within the patient portal. Submissions are securely piped to a fine-tuned BERT classification microservice that performs automated text preprocessing, Multi-Class Sentiment Analysis, and Topic Classification to route the issue into specific departments (e.g., *Customer Service, Medical Staff, Billing, Delivery delay*) for administrative analytics.
+* **Customer Complaints & Feedback AI Component:** An end-to-end user feedback intake pipeline embedded within the patient portal. Submissions are securely piped to a fine-tuned BERT classification microservice that performs automated text preprocessing, Multi-Class Sentiment Analysis, and Topic Classification to route the issue into specific departments (e.g., *Customer Service, Medical Staff,Delivery delay*) for administrative analytics.
 * **Automated Operational Awareness & Alerting:** Utilizes managed background workers (`IHostedService`) coordinated with **Brevo (External SMTP)** to guarantee continuous administrative oversight:
   * **Immediate Low-Stock Alerts:** Automatically dispatches urgent notification emails to the administration the exact millisecond a medicine's stock drops below its critical threshold during a transaction.
   * **Weekly Shortage Reporting:** A scheduled background service scans database records to compile an automated weekly breakdown of depleted or critically low-stock medicines, delivering it directly to the admin's inbox.
@@ -113,7 +116,7 @@ The platform follows a polyglot architecture, balancing high-throughput transact
 * **Qdrant Vector Database** — Stores, indexes, and queries semantic embeddings for the RAG consultation pipeline.
 
 ### 🔐 Authentication & Identity
-* **ASP.NET Core Identity** — Manages authentication, password hashing, persistent cookies, and role-based access control.
+* **ASP.NET Core Identity** — Manages authentication, password hashing, persistent cookies, and role-based access control, with dedicated **Administrator** and **Pharmacist** roles to enforce secure, permission-based access across the system.
 
 ### 🤖 Machine Learning, NLP & AI Core
 * **Llama 3.3 (via Groq API)** — Foundational LLM for context-grounded response generation in consultation and support pipelines.
@@ -128,3 +131,10 @@ The platform follows a polyglot architecture, balancing high-throughput transact
 * **Microsoft.Extensions.Caching (`IMemoryCache`)** — In-memory storage backing the custom semantic cache.
 * **JavaScript (ES6+)** — Powers responsive UI behavior, client-side validation, and asynchronous requests to backend controllers.
 * **Groq API** — High-performance inference platform powering low-latency Llama 3.3 response generation for the AI consultation and customer support microservices.
+
+
+## 🏗️ C4 Architecture Diagram
+
+The following C4 diagram provides a high-level overview of the system architecture and interactions between the ASP.NET MVC application, AI microservices, external services, and supporting infrastructure.
+
+![C4 Architecture Diagram](Diagram-C4.png)
