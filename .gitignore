@@ -11,7 +11,6 @@
 *.sln.docstates
 
 WebApplication4/appsettings.json
-WebApplication4/Infrastructure/DB/ApplicationDbContext.cs
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
