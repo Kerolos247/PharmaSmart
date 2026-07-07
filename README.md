@@ -113,7 +113,7 @@ The platform follows a polyglot architecture, balancing high-throughput transact
 * **Qdrant Vector Database** — Stores, indexes, and queries semantic embeddings for the RAG consultation pipeline.
 
 ### 🔐 Authentication & Identity
-* **ASP.NET Core Identity** — Manages authentication, password hashing, persistent cookies, and role-based access control.
+* **ASP.NET Core Identity** — Manages authentication, password hashing, persistent cookies, and role-based access control, with dedicated **Administrator** and **Pharmacist** roles to enforce secure, permission-based access across the system.
 
 ### 🤖 Machine Learning, NLP & AI Core
 * **Llama 3.3 (via Groq API)** — Foundational LLM for context-grounded response generation in consultation and support pipelines.
