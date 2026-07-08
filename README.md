@@ -41,16 +41,17 @@ An intelligent, stateless assistant that handles operational and customer-servic
 
 * **Egyptian Arabic Optimization** — Tuned to understand spoken Egyptian Arabic, allowing patients to interact naturally in their local dialect.
 * **Speech-to-Text (STT)** — Transcribes Egyptian Arabic audio using **Whisper**.
-* **Response Generation** — Produces natural-language replies with **Llama** and converts them to speech via Text-to-Speech.
+* **Response Generation** — Accepts voice input through **Speech-to-Text (STT)** and generates natural-language text responses using **Llama**.
 * **Supported Queries** — Branch locations, contact details, business hours, available services, site navigation help, and general support.
 * **Horizontal Scalability** — Runs as a stateless service, allowing scaling through simple container replication.
 
-#### 3. Sentiment & Complaint Classification Service (Stateless AI Microservice)
-A text-analysis pipeline embedded in the customer feedback flow to monitor service quality.
+#### 3. Sentiment & Complaint Classification Services (Stateless AI Microservices)
+Two independent FastAPI-based stateless AI microservices integrated into the customer feedback workflow to monitor service quality.
 
-* **BERT Classification Model** — Routes submissions to a fine-tuned BERT model for preprocessing and text understanding.
-* **Dual Classification** — Performs sentiment analysis (positive/negative) alongside topic classification.
-* **Structured Output** — Maps complaints to operational categories (e.g., *delivery delay, missing medication, incorrect order, staff behavior, website issues, payment problems*) and returns them as structured JSON to the .NET core application.
+* **Arabic Text Preprocessing** — Normalizes Arabic text and corrects common spelling variations before inference to improve classification accuracy.
+* **Sentiment Analysis Model** — Uses a fine-tuned BERT model to classify customer feedback as positive or negative.
+* **Complaint Classification Model** — Uses a separate fine-tuned BERT model to categorize complaints (e.g., Customer Service, Medical Staff, Delivery Delay).
+* **Structured Output** — Returns prediction results as structured JSON to the .NET Core application for storage, analytics, and dashboard reporting.
 
 #### 4. Custom C# Semantic Caching Component
 A hybrid caching layer built natively into the C# codebase to optimize AI-layer performance.
