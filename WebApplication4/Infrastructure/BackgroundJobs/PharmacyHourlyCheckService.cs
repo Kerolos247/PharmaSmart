@@ -13,7 +13,7 @@ namespace WebApplication4.Infrastructure.BackgroundJobs
 
 
             _timer = new PeriodicTimer(TimeSpan.FromHours(1));
-            //_timer = new PeriodicTimer(TimeSpan.FromSeconds(100));
+           
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

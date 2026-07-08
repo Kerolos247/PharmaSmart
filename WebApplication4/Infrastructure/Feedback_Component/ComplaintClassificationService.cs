@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
-using Microsoft.Extensions.Configuration; // تم إضافة الـ namespace ده لقراءة الإعدادات
+using Microsoft.Extensions.Configuration; 
 using WebApplication4.Application.Feedback_Component.Dto;
 using WebApplication4.Application.Feedback_Component.IService;
 
@@ -17,7 +17,7 @@ namespace WebApplication4.Infrastructure.Feedback_Component
         {
             _httpClient = httpClient;
 
-            // القراءة بالكامل من ملف appsettings.json بدون أي Hardcoded Links
+          
             _apiUrl = configuration["ComplaintApiSettings:ApiUrl"];
             _token = configuration["ComplaintApiSettings:Token"];
         }

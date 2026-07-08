@@ -1,7 +1,11 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using WebApplication4.Application.Feedback_Component.Dto;
 using WebApplication4.Application.Feedback_Component.IService;
 
@@ -14,14 +18,15 @@ namespace WebApplication4.Infrastructure.Feedback_Component
         private readonly string _token;
         private readonly string _url;
 
-        public SentimentService(IMemoryCache cache)
+       
+        public SentimentService(HttpClient client, IMemoryCache cache, IConfiguration configuration)
         {
-            _client = new HttpClient();
+            _client = client;
             _cache = cache;
 
-            
-            _token = "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";
-            _url = "https://kerolos1-sentiments-api.hf.space/predict"; 
+           
+            _url = configuration["SentimentApiSettings:ApiUrl"];
+            _token = configuration["SentimentApiSettings:Token"];
         }
 
         public async Task<SentimentResponseDto> AnalyzeAsync(string text)
@@ -29,22 +34,23 @@ namespace WebApplication4.Infrastructure.Feedback_Component
             if (string.IsNullOrWhiteSpace(text))
                 return new SentimentResponseDto { Label = "invalid", Score = 0 };
 
-            
             if (_cache.TryGetValue(text, out SentimentResponseDto cached))
                 return cached;
 
-          
             var payload = new { text = text };
             var jsonContent = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
 
             try
             {
-              
                 var request = new HttpRequestMessage(HttpMethod.Post, _url);
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+                if (!string.IsNullOrEmpty(_token))
+                {
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+                }
+
                 request.Content = jsonContent;
 
-               
                 var response = await _client.SendAsync(request);
                 var resultJson = await response.Content.ReadAsStringAsync();
 
@@ -53,7 +59,6 @@ namespace WebApplication4.Infrastructure.Feedback_Component
                     return new SentimentResponseDto { Label = "error", Score = 0 };
                 }
 
-              
                 var apiResponse = JsonSerializer.Deserialize<FastApiSentimentResponse>(
                     resultJson,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
@@ -62,11 +67,9 @@ namespace WebApplication4.Infrastructure.Feedback_Component
                 var responseDto = new SentimentResponseDto
                 {
                     Label = apiResponse?.Label ?? "unknown",
-                  
                     Score = (float)(apiResponse?.ConfidenceScore ?? 0)
                 };
 
-                
                 _cache.Set(text, responseDto, TimeSpan.FromMinutes(10));
                 return responseDto;
             }
@@ -76,7 +79,4 @@ namespace WebApplication4.Infrastructure.Feedback_Component
             }
         }
     }
-
-   
-    
 }

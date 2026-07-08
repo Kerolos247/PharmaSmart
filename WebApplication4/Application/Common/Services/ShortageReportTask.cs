@@ -23,7 +23,7 @@ namespace WebApplication4.Application.Common.Services
 
 
             bool isFridayNight = now.DayOfWeek == DayOfWeek.Friday && now.Hour == 22;
-            //bool isFridayNight = true;
+            
 
 
             bool alreadySentToday = _lastSentDate.HasValue && _lastSentDate.Value.Date == now.Date;

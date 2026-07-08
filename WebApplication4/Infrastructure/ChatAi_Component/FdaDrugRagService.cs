@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration; // تم التأكيد على الـ namespace ده
+using Microsoft.Extensions.Configuration;
 using WebApplication4.Application.ChatAi_Component.Dto;
 using WebApplication4.Application.ChatAi_Component.IService;
 using WebApplication4.Infrastructure.SemanticCashe;
@@ -28,7 +28,7 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
             _configuration = configuration;
             _semanticCache = semanticCache;
 
-            // القراءة بالكامل من ملف appsettings.json بدون أي روابط ثابتة داخل الكود
+          
             _fastApiAskUrl = _configuration["FdaDrugRagSettings:AskUrl"];
             _fastApiEmbedUrl = _configuration["FdaDrugRagSettings:EmbedUrl"];
         }

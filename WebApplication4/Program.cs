@@ -85,9 +85,6 @@ builder.Services.AddIdentity<Pharmacist, IdentityRole>(options =>
 builder.Services.AddInfrastructureServices();
 
 
-//string redisConnectionString = "skyish-cheerful-trackable-96648.db.redis.io:12615,password=tdK5KK17XOsaSHg1uxE30uIoRWOo5sPK";
-//var multiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
-//builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 
 
 builder.Services.AddRateLimiter(options =>
