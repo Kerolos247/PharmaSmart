@@ -4,6 +4,11 @@ An enterprise-grade Pharmacy Management System that models real-world pharmacy o
 
 ---
 
+> 🧠 **Looking for the AI Engine?**  
+> The intelligent features of PharmaSmart (FDA Drug RAG, Whisper Voice Assistant, BERT Sentiment Analysis, and Complaint Classification) are powered by a decoupled, containerized Python stack.  
+> 👉 **[Explore the PharmaSmart AI Microservices Repository 🚀](https://github.com/Kerolos247/PharmaSmart-AI-Microservices)**
+---
+
 ## 🚀 Key Features
 
 ### 🔐 Authentication, Security & Rate Limiting
