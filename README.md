@@ -142,3 +142,15 @@ The platform follows a polyglot architecture, balancing high-throughput transact
 The following C4 diagram provides a high-level overview of the system architecture and interactions between the ASP.NET MVC application, AI microservices, external services, and supporting infrastructure.
 
 ![C4 Architecture Diagram](Diagram-C4.png)
+
+---
+
+### 📺 Video Demo & System Walkthrough
+[![Watch PharmaSmart Demo](https://img.shields.io/badge/Watch_Demo_Video-Google_Drive-blue?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/1zOMZyWdEbH-0MTeFAaWENsiTbNgLzKmx/view?usp=drive_link)
+
+Click the badge above or **[this link](https://drive.google.com/file/d/1zOMZyWdEbH-0MTeFAaWENsiTbNgLzKmx/view?usp=drive_link)** to watch a video demonstration covering the system's core capabilities and high-performance engineering:
+
+*   ⚡ **Race Conditions & Concurrency Control:** Deep dive into how we combined Pessimistic & Optimistic locking to handle concurrent inventory updates safely.
+*   💬 **FDA RAG Chatbot:** Interactive chatbot powered by Retrieval-Augmented Generation (RAG) to fetch and synthesize FDA-aligned medical information.
+*   🤖 **AI Patient Support:** Seamless AI assistant guiding patients through prescriptions and general medical inquiries.
+*   📧 **Zero-Stock Automated Alerts:** Background services (`IHostedService`) monitoring inventory and dispatching instant email alerts when medicine stock hits zero.
