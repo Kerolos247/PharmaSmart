@@ -4,6 +4,11 @@ An enterprise-grade Pharmacy Management System that models real-world pharmacy o
 
 ---
 
+> 🧠 **Looking for the AI Engine?**  
+> The intelligent features of PharmaSmart (FDA Drug RAG, Whisper Voice Assistant, BERT Sentiment Analysis, and Complaint Classification) are powered by a decoupled, containerized Python stack.  
+> 👉 **[Explore the PharmaSmart AI Microservices Repository 🚀](https://github.com/Kerolos247/PharmaSmart-AI-Microservices)**
+---
+
 ## 🚀 Key Features
 
 ### 🔐 Authentication, Security & Rate Limiting
@@ -78,9 +83,7 @@ The backend is an enterprise-grade **ASP.NET Core MVC** application built on **C
 * **Prescription Tracking & Fulfillment:** Coordinates the registration, tracking, and multi-criteria search of official medical prescriptions. Includes a dedicated transactional prescription fulfillment sub-system for processing medicine dispensing while enforcing strict prescription validation and business rules.
 * **Cloud-Decoupled Online Prescription Media Storage:** Enables patients to dynamically upload digital or handwritten prescription images via the web portal. Uploaded files undergo strict server-side validation to enforce required file submission, restrict uploads to approved image formats (`.jpg`, `.jpeg`, `.png`), and limit file sizes to 5 MB before processing. The platform also provides efficient paginated prescription media retrieval to ensure scalable browsing and responsive performance when managing large volumes of uploaded prescriptions. To protect web server throughput, transactional metadata is securely persisted within the SQL Server relational instance, while heavy physical assets are synchronously offloaded to **Cloudinary** via background processing pipelines to preserve database performance.
 * **Supplier Lifecycle Component:** Tracks extensive B2B vendor and distributor records, facilitating rapid supplier lookups and full standalone CRUD operations to streamline logistics and procurement workflows.
-* **Granular Medicine Catalog Component:** Manages the full pharmaceutical registry (Generic names, Barcodes, Categories, and Dosage forms). Each medication profile is explicitly mapped to its active vendor, ensuring structured relational constraints across the entire domain dataset.
-* **Unified Batch Intake Integration:** Enforces an atomic transactional boundary across the medication lifecycle. A new product cannot be registered into the catalog without instantly defining and executing its initial batch shipment intake metrics (Lot numbers, Expiration tracking dates, and Initial quantities) to populate live database stock dynamically.
-
+* **Granular Medicine Catalog Component:** Manages the full pharmaceutical registry (Generic names, Categories, and Dosage forms). Each medication profile is explicitly mapped to its active vendor, ensuring structured relational constraints across the entire domain dataset.
 * **Comprehensive DTO Validation Layer:** Every request DTO is secured through server-side validation using ASP.NET Core Data Annotations, enforcing required fields, data formats, length constraints, file validation, and business input rules before any request reaches the application's business logic.
   
 * **Inventory & Concurrency Control (Race Condition Mitigation):** 
