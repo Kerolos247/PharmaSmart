@@ -46,7 +46,7 @@ namespace WebApplication4.Pressention.Controllers
             if (!ModelState.IsValid) return View(dto);
 
             var success = await _authService.RegisterAsync(dto);
-            if (!success.Success)
+            if (success.Success)
             {
                 return RedirectToAction("AdminDashboard");
             }

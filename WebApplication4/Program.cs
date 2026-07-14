@@ -17,10 +17,13 @@ using System.Net.Mail;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
 using WebApplication4.Infrastructure.SemanticCashe;
+using System.Net.Http.Headers; // تم استدعاؤها للـ AuthenticationHeaderValue
+using WebApplication4.Application.Feedback_Component.IService; // مساحة الاسم الخاصة بـ IComplaintClassificationService
+using WebApplication4.Infrastructure.Feedback_Component; // مساحة الاسم الخاصة بـ ComplaintClassificationService
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+// --- 1. Controllers, Views & Razor Configurations ---
 builder.Services.AddControllersWithViews()
     .AddRazorOptions(options =>
     {
@@ -30,29 +33,28 @@ builder.Services.AddControllersWithViews()
         options.ViewLocationFormats.Insert(3, "/Views/Shared/{0}.cshtml");
     });
 
+// --- 2. Caching & Core Services ---
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<SemanticCacheService>();
 
-
+// --- 3. Database Connection ---
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+// --- 4. Cloudinary Integration ---
 var cloudinarySettings = builder.Configuration.GetSection("CloudinarySettings");
-
 var account = new CloudinaryDotNet.Account(
     cloudinarySettings["CloudName"],
     cloudinarySettings["ApiKey"],
     cloudinarySettings["ApiSecret"]
 );
-
 var cloudinary = new CloudinaryDotNet.Cloudinary(account);
 builder.Services.AddSingleton(cloudinary);
 
-
-var smtpServer = builder.Configuration["SmtpSettings:Server"] ?? "smtp-relay.brevo.com";
+// --- 5. SMTP Client Configuration ---
+var smtpServer = builder.Configuration["SmtpSettings:Server"];
 var smtpPort = int.Parse(builder.Configuration["SmtpSettings:Port"] ?? "587");
 var smtpLogin = builder.Configuration["SmtpSettings:Login"];
 var smtpPassword = builder.Configuration["SmtpSettings:Password"];
@@ -63,7 +65,7 @@ builder.Services.AddScoped(sp => new SmtpClient(smtpServer, smtpPort)
     EnableSsl = true
 });
 
-
+// --- 6. ASP.NET Core Identity ---
 builder.Services.AddIdentity<Pharmacist, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -72,28 +74,59 @@ builder.Services.AddIdentity<Pharmacist, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 8;
 
-
     options.Lockout.AllowedForNewUsers = false;
-
     options.User.RequireUniqueEmail = true;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders()
 .AddDefaultUI();
 
-
+// --- 7. Custom Infrastructure Services ---
 builder.Services.AddInfrastructureServices();
 
+// --- 8. Typed HttpClient for Pharmasmart AI Service ---
+builder.Services.AddHttpClient<IPharmasmartAiService, PharmasmartAiService>((serviceProvider, client) =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    var baseUrl = configuration["HuggingFaceSettings:BaseUrl"];
+    var token = configuration["HuggingFaceSettings:Token"];
 
+    if (!string.IsNullOrEmpty(baseUrl))
+    {
+        client.BaseAddress = new Uri(baseUrl);
+    }
 
+    if (!string.IsNullOrEmpty(token))
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    }
+});
 
+// --- 9. Typed HttpClient for Complaint Classification Service (تمت إضافة الجزء الجديد هنا) ---
+builder.Services.AddHttpClient<IComplaintClassificationService, ComplaintClassificationService>((serviceProvider, client) =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    var apiUrl = configuration["ComplaintApiSettings:ApiUrl"];
+    var token = configuration["ComplaintApiSettings:Token"];
+
+    if (!string.IsNullOrEmpty(apiUrl))
+    {
+        client.BaseAddress = new Uri(apiUrl);
+    }
+
+    if (!string.IsNullOrEmpty(token))
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    }
+});
+
+// --- 10. Rate Limiting Policies ---
 builder.Services.AddRateLimiter(options =>
 {
     options.AddPolicy("LoginRateLimit", context =>
     {
         var remoteIpAddress = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
 
-        
         return RateLimitPartition.GetTokenBucketLimiter(
             partitionKey: remoteIpAddress,
             factory: _ => new TokenBucketRateLimiterOptions
@@ -105,7 +138,6 @@ builder.Services.AddRateLimiter(options =>
             });
     });
 
-    
     options.AddPolicy("UploadRateLimit", context =>
     {
         var remoteIpAddress = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
@@ -119,7 +151,6 @@ builder.Services.AddRateLimiter(options =>
             });
     });
 
-    
     options.AddPolicy("FeedbackRateLimit", context =>
     {
         var remoteIpAddress = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
@@ -133,9 +164,7 @@ builder.Services.AddRateLimiter(options =>
             });
     });
 
-
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-
 
     options.OnRejected = async (context, cancellationToken) =>
     {
@@ -152,15 +181,17 @@ builder.Services.AddRateLimiter(options =>
     };
 });
 
+// =========================================================================
+// --- 11. Building and Configuring Middleware Pipeline ---
+// =========================================================================
 var app = builder.Build();
 
-
+// Seed Database
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     await IdentitySeeder.SeedAsync(services);
 }
-
 
 if (!app.Environment.IsDevelopment())
 {
@@ -172,17 +203,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
 app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-
 
 app.Run();

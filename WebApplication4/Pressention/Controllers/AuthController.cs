@@ -20,24 +20,7 @@ namespace WebApplication4.Pressention.Controllers
             _authService = authService;
             
         }
-        //[HttpGet]
-        //public IActionResult Register() => View();
-
-        //[HttpPost]
-        //public async Task<IActionResult> Register(PharmacistRegisterDto dto)
-        //{
-        //    if (!ModelState.IsValid) return View(dto);
-
-        //    var success = await _authService.RegisterAsync(dto);
-        //    if (!success.Success)
-        //    {
-        //        ModelState.AddModelError("",success.Message);
-        //        return View(dto);
-        //    }
-
-        //    return RedirectToAction("Login");
-        //}
-
+        
         [HttpGet]
         public IActionResult Login() => View();
 
