@@ -18,8 +18,8 @@ using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
 using WebApplication4.Infrastructure.SemanticCashe;
 using System.Net.Http.Headers; // تم استدعاؤها للـ AuthenticationHeaderValue
-using WebApplication4.Application.Feedback_Component.IService; // مساحة الاسم الخاصة بـ IComplaintClassificationService
-using WebApplication4.Infrastructure.Feedback_Component; // مساحة الاسم الخاصة بـ ComplaintClassificationService
+using WebApplication4.Application.Feedback_Component.IService; // مساحة الاسم الخاصة بـ IComplaintClassificationService و ISentimentService
+using WebApplication4.Infrastructure.Feedback_Component; // مساحة الاسم الخاصة بـ ComplaintClassificationService و SentimentService
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -102,7 +102,7 @@ builder.Services.AddHttpClient<IPharmasmartAiService, PharmasmartAiService>((ser
     }
 });
 
-// --- 9. Typed HttpClient for Complaint Classification Service (تمت إضافة الجزء الجديد هنا) ---
+// --- 9. Typed HttpClient for Complaint Classification Service ---
 builder.Services.AddHttpClient<IComplaintClassificationService, ComplaintClassificationService>((serviceProvider, client) =>
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
@@ -120,7 +120,25 @@ builder.Services.AddHttpClient<IComplaintClassificationService, ComplaintClassif
     }
 });
 
-// --- 10. Rate Limiting Policies ---
+// --- 10. Typed HttpClient for Sentiment Analysis Service (تمت إضافة الجزء الجديد هنا) ---
+builder.Services.AddHttpClient<ISentimentService, SentimentService>((serviceProvider, client) =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    var apiUrl = configuration["SentimentApiSettings:ApiUrl"];
+    var token = configuration["SentimentApiSettings:Token"];
+
+    if (!string.IsNullOrEmpty(apiUrl))
+    {
+        client.BaseAddress = new Uri(apiUrl);
+    }
+
+    if (!string.IsNullOrEmpty(token))
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    }
+});
+
+// --- 11. Rate Limiting Policies ---
 builder.Services.AddRateLimiter(options =>
 {
     options.AddPolicy("LoginRateLimit", context =>
@@ -182,7 +200,7 @@ builder.Services.AddRateLimiter(options =>
 });
 
 // =========================================================================
-// --- 11. Building and Configuring Middleware Pipeline ---
+// --- 12. Building and Configuring Middleware Pipeline ---
 // =========================================================================
 var app = builder.Build();
 

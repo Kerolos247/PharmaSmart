@@ -17,7 +17,7 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
         private readonly HttpClient _httpClient;
         private readonly ILogger<PharmasmartAiService> _logger;
 
-        // الـ Constructor أصبح نظيفاً تماماً ومستعداً لاستقبال الـ Client المهيأ جاهزاً من الـ DI
+      
         public PharmasmartAiService(HttpClient httpClient, ILogger<PharmasmartAiService> logger)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
@@ -40,7 +40,7 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
 
             try
             {
-                // إرسال الطلب مع ضمان عمل Dispose للـ Response بمجرد الخروج من الـ Block
+             
                 using var response = await _httpClient.PostAsync("/api/chat-text", content);
                 response.EnsureSuccessStatusCode();
 
@@ -49,7 +49,7 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
             catch (HttpRequestException ex)
             {
                 _logger.LogError(ex, "HTTP request failed in StreamChatAsync for message length: {Length}", userMessage.Length);
-                throw; // نرفع الاستثناء للـ Controller أو الـ Middleware لمعالجته وإرجاع الـ Error المناسب للـ Client
+                throw; 
             }
         }
 
@@ -63,7 +63,7 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
             using var content = new MultipartFormDataContent();
             using var streamContent = new StreamContent(audioStream);
 
-            // إعداد نوع الـ Content بشكل آمن
+           
             streamContent.Headers.ContentType = new MediaTypeHeaderValue("audio/wav");
             content.Add(streamContent, "file", fileName);
 
@@ -81,19 +81,16 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
             }
         }
 
-        /// <summary>
-        /// ميثود مساعدة عامة لقراءة الـ Response بكفاءة عالية وبأقل استهلاك للميموري
-        /// </summary>
         private async Task<string> ProcessResponseAsync(HttpResponseMessage response)
         {
             try
             {
-                // قراءة الـ Stream مباشرة بدلاً من استهلاك الـ Memory لحفظ الـ String بالكامل أولاً
+              
                 using var responseStream = await response.Content.ReadAsStreamAsync();
 
                 var options = new JsonSerializerOptions
                 {
-                    PropertyNameCaseInsensitive = true // لتفادي أي اختلاف في الـ Casing بين الـ API والـ Model
+                    PropertyNameCaseInsensitive = true 
                 };
 
                 var result = await JsonSerializer.DeserializeAsync<PatientSupportAiResponse>(responseStream, options);
@@ -102,7 +99,7 @@ namespace WebApplication4.Infrastructure.ChatAi_Component
             }
             catch (JsonException jsonEx)
             {
-                // في حال فشل التحويل (مثلاً السيرفر أرجع نصاً عادياً بدلاً من JSON)، نقوم بالـ Fallback الآمن
+               
                 _logger.LogWarning(jsonEx, "Failed to deserialize JSON response. Falling back to raw string content.");
 
                 return await response.Content.ReadAsStringAsync();
