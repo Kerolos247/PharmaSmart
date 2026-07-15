@@ -153,4 +153,4 @@ Click the badge above or **[this link](https://drive.google.com/file/d/1zOMZyWdE
 *   ⚡ **Race Conditions & Concurrency Control:** Deep dive into how we combined Pessimistic & Optimistic locking to handle concurrent inventory updates safely.
 *   💬 **FDA RAG Chatbot:** Interactive chatbot powered by Retrieval-Augmented Generation (RAG) to fetch and synthesize FDA-aligned medical information.
 *   🤖 **AI Patient Support:** Interactive assistant guiding patients on how to use the platform, upload prescription images, locate the pharmacy, and retrieve contact details or operating hours.
-*   📧 **Zero-Stock Automated Alerts:** Background services (`IHostedService`) monitoring inventory and dispatching instant email alerts when medicine stock hits zero.
+*   📧 **Zero-Stock Automated Alerts:** monitoring inventory and dispatching instant email alerts when medicine stock hits zero.
