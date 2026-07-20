@@ -80,7 +80,7 @@ PharmaSmart is a full-featured pharmacy management platform that combines modern
 
 ## System Architecture
 
-![C4 Architecture Diagram](images/c4-architecture.png)
+![https://github.com/Kerolos247/PharmaSmart/blob/master/Diagram-C4.png)
 
 ---
 
