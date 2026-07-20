@@ -6,14 +6,14 @@ An end-to-end Pharmacy Management System that models real-world pharmacy operati
 
 The intelligent capabilities of PharmaSmart—including FDA-backed drug consultation, Egyptian Arabic voice assistance, sentiment analysis, and complaint classification—are powered by a decoupled, containerized Python microservices architecture.
 
-👉 **Explore the PharmaSmart AI Microservices Repository:**
+👉 **Explore the PharmaSmart AI Microservices Repository:**  
 https://github.com/Kerolos247/PharmaSmart-AI-Microservices
 
 ---
 
 # 📋 Overview
 
-PharmaSmart is a full-featured pharmacy management platform that combines modern backend engineering practices with AI-powered capabilities. The system enables pharmacists to manage medicines, prescriptions, patients, suppliers, and inventory through a unified ASP.NET Core MVC application, while dedicated Python microservices provide intelligent pharmaceutical services.
+PharmaSmart is a full-featured pharmacy management platform that combines modern backend engineering practices with AI-powered capabilities. The system enables pharmacists to manage medicines, prescriptions, patients, suppliers, and inventory through a unified ASP.NET Core MVC application, while dedicated Python microservices provide intelligent pharmaceutical services. The ASP.NET Core backend orchestrates AI requests and implements semantic caching to reduce LLM latency, token usage, and repeated requests before forwarding requests to the AI microservices.
 
 ## Key Capabilities
 
@@ -55,24 +55,24 @@ PharmaSmart is a full-featured pharmacy management platform that combines modern
 
 ---
 
-## 🤖 AI-Powered Microservices
+## 🤖 AI-Powered Features
 
 * FDA Drug Consultation using a Stateful RAG pipeline.
 * Egyptian Arabic Voice Assistant powered by Whisper.
 * Fine-tuned BERT models for sentiment analysis and complaint classification.
-* Semantic Caching layer to reduce LLM latency, token usage, and repeated requests.
+* **Semantic Caching implemented in the ASP.NET Core backend** to reduce LLM latency, token usage, and repeated requests before forwarding AI requests to the Python microservices.
 
 ---
 
 # 🛠️ Tech Stack
 
-| Category             | Technologies                                                                 |
-| :------------------- | :--------------------------------------------------------------------------- |
-| **Backend**          | ASP.NET Core 8 (MVC), Entity Framework Core 8, LINQ, ASP.NET Core Identity   |
-| **Database**         | SQL Server, Qdrant (Vector Database)                                         |
+| Category | Technologies |
+| :--- | :--- |
+| **Backend** | ASP.NET Core 8 (MVC), Entity Framework Core 8, LINQ, ASP.NET Core Identity |
+| **Database** | SQL Server, Qdrant (Vector Database) |
 | **AI Microservices** | FastAPI, Python 3.11, Docker, LangChain, Llama 3.3 (Groq API), Whisper, BERT |
-| **Cloud Services**   | Cloudinary, Brevo SMTP, Hugging Face                                         |
-| **Frontend**         | Razor Views, Bootstrap, JavaScript (ES6+)                                    |
+| **Cloud Services** | Cloudinary, Brevo SMTP, Hugging Face |
+| **Frontend** | Razor Views, Bootstrap, JavaScript (ES6+) |
 
 ---
 
@@ -80,23 +80,22 @@ PharmaSmart is a full-featured pharmacy management platform that combines modern
 
 ## System Architecture
 
-![C4 Digram Architecture](https://github.com/Kerolos247/PharmaSmart/blob/master/Diagram-C4.png)
-
+![C4 Architecture Diagram](https://github.com/Kerolos247/PharmaSmart/blob/master/Diagram-C4.png)
 
 ---
 
 # 📸 Screenshots
 
-|        Login       |      Dashboard     |
-| :----------------: | :----------------: |
+| Login | Dashboard |
+| :---: | :---: |
 | *(Add Screenshot)* | *(Add Screenshot)* |
 
-|      Inventory     |    Prescription    |
-| :----------------: | :----------------: |
+| Inventory | Prescription |
+| :---: | :---: |
 | *(Add Screenshot)* | *(Add Screenshot)* |
 
-|     AI Chatbot     |   Voice Assistant  |
-| :----------------: | :----------------: |
+| AI Chatbot | Voice Assistant |
+| :---: | :---: |
 | *(Add Screenshot)* | *(Add Screenshot)* |
 
 ---
@@ -112,7 +111,7 @@ Watch the complete system walkthrough demonstrating:
 * Concurrency handling
 * Automated inventory alerts
 
-👉 **Demo Video:**
+👉 **Demo Video:**  
 https://drive.google.com/file/d/1zOMZyWdEbH-0MTeFAaWENsiTbNgLzKmx/view?usp=drive_link
 
 ---
@@ -126,6 +125,7 @@ Configuration files, external service credentials, and deployment-specific setti
 The project integrates several external services, including SQL Server, Cloudinary, Brevo SMTP, Groq API, and containerized AI microservices, which require additional configuration before the application can be executed.
 
 ---
+
 # 👨‍💻 Author
 
-* **LinkedIn:** [linkedin.com/in/kerolos-adel-190948375](https://linkedin.com/in/kerolos-adel-190948375)
+* **LinkedIn:** https://linkedin.com/in/kerolos-adel-190948375
