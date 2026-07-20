@@ -128,7 +128,4 @@ The project integrates several external services, including SQL Server, Cloudina
 ---
 # 👨‍💻 Author
 
-**Kerolos Adel**
-
-* GitHub: https://github.com/Kerolos247
-* LinkedIn: linkedin.com/in/kerolos-adel-190948375
+* **LinkedIn:** [linkedin.com/in/kerolos-adel-190948375](https://linkedin.com/in/kerolos-adel-190948375)
