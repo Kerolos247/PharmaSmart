@@ -117,49 +117,13 @@ https://drive.google.com/file/d/1zOMZyWdEbH-0MTeFAaWENsiTbNgLzKmx/view?usp=drive
 
 ---
 
-# 🚀 Getting Started
+# 📦 Repository Notice
 
-## Prerequisites
+This repository is published for portfolio and code review purposes.
 
-* .NET 8 SDK
-* SQL Server
-* Docker Desktop
+Configuration files, external service credentials, and deployment-specific settings have been intentionally excluded.
 
----
-
-## Clone Repository
-
-```bash
-git clone https://github.com/Kerolos247/PharmaSmart.git
-cd PharmaSmart
-```
-
----
-
-## Database Setup
-
-Update the SQL Server connection string inside:
-
-```text
-appsettings.json
-```
-
-Apply Entity Framework Core migrations:
-
-```bash
-dotnet ef database update
-```
-
----
-
-## Configure External Services
-
-Provide your credentials inside `appsettings.json` (or Environment Variables):
-
-* SQL Server
-* Cloudinary
-* Brevo SMTP
-* Groq API
+The project integrates several external services, including SQL Server, Cloudinary, Brevo SMTP, Groq API, and containerized AI microservices, which require additional configuration before the application can be executed.
 
 ---
 # 👨‍💻 Author
