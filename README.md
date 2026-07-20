@@ -84,22 +84,6 @@ PharmaSmart is a full-featured pharmacy management platform that combines modern
 
 ---
 
-# 📸 Screenshots
-
-| Login | Dashboard |
-| :---: | :---: |
-| *(Add Screenshot)* | *(Add Screenshot)* |
-
-| Inventory | Prescription |
-| :---: | :---: |
-| *(Add Screenshot)* | *(Add Screenshot)* |
-
-| AI Chatbot | Voice Assistant |
-| :---: | :---: |
-| *(Add Screenshot)* | *(Add Screenshot)* |
-
----
-
 # 🎥 Demo
 
 Watch the complete system walkthrough demonstrating:
