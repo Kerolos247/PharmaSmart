@@ -7,7 +7,7 @@ An end-to-end Pharmacy Management System that models real-world pharmacy operati
 The intelligent capabilities of PharmaSmart—including FDA-backed drug consultation, Egyptian Arabic voice assistance, sentiment analysis, and complaint classification—are powered by a decoupled, containerized Python microservices architecture.
 
 👉 **Explore the PharmaSmart AI Microservices Repository:**
-https://github.com/Kerolos247/PharmaSmart-AI
+https://github.com/Kerolos247/PharmaSmart-AI-Microservices
 
 ---
 
