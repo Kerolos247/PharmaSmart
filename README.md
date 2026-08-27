@@ -13,11 +13,11 @@ https://github.com/Kerolos247/PharmaSmart-AI-Microservices
 
 # 📋 Overview
 
-PharmaSmart is a full-featured pharmacy management platform that combines modern backend engineering practices with AI-powered capabilities. The system enables pharmacists to manage medicines, prescriptions, patients, suppliers, and inventory through a unified ASP.NET Core MVC application, while dedicated Python microservices provide intelligent pharmaceutical services. The ASP.NET Core backend orchestrates AI requests and implements semantic caching to reduce LLM latency, token usage, and repeated requests before forwarding requests to the AI microservices.
+PharmaSmart is a full-featured pharmacy management platform that combines modern backend engineering practices with AI-powered capabilities. The system enables administrators and pharmacists to manage medicines, prescriptions, patients, suppliers, and inventory through a unified ASP.NET Core MVC application with role-based access control and high-concurrency inventory protection. Dedicated Python microservices provide intelligent pharmaceutical services, while the ASP.NET Core backend orchestrates AI requests and implements semantic caching to reduce LLM latency, token usage, and repeated requests.
 
 ## Key Capabilities
 
-* 🔐 **Multi-Layered Security** — Brute-force protection, IP/device rate limiting, secure password recovery, and role-based authorization.
+* 🔐 **Multi-Layered Security & RBAC** — Brute-force protection, IP/device rate limiting, secure password recovery, and role-based authorization (Admin vs. Pharmacist).
 * 🏥 **Complete Pharmacy Operations** — Patient, supplier, prescription, and medicine lifecycle management.
 * 📦 **Inventory Concurrency Control** — Dual-strategy concurrency handling using both pessimistic and optimistic locking.
 * 🤖 **AI Integrations** — FDA-backed RAG chatbot, Egyptian Arabic voice assistant, and automated complaint & sentiment analysis.
