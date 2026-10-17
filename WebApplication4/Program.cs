@@ -8,42 +8,40 @@ using WebApplication4.Infrastructure.DependencyInjection;
 using WebApplication4.Infrastructure.Seed;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using WebApplication4.Infrastructure.Auth_Component;
 using StackExchange.Redis;
-using WebApplication4.Application.ChatAi_Component.IService;
-using WebApplication4.Infrastructure.ChatAi_Component;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
 using WebApplication4.Infrastructure.SemanticCashe;
-using System.Net.Http.Headers; // تم استدعاؤها للـ AuthenticationHeaderValue
-using WebApplication4.Application.Feedback_Component.IService; // مساحة الاسم الخاصة بـ IComplaintClassificationService و ISentimentService
-using WebApplication4.Infrastructure.Feedback_Component; // مساحة الاسم الخاصة بـ ComplaintClassificationService و SentimentService
+using System.Net.Http.Headers;
+using WebApplication4.Application.Modules.Feedback.Interfaces;
+using WebApplication4.Application.Modules.ChatAi.Interfaces;
+using WebApplication4.Infrastructure.ExternalServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- 1. Controllers, Views & Razor Configurations ---
+
 builder.Services.AddControllersWithViews()
     .AddRazorOptions(options =>
     {
-        options.ViewLocationFormats.Insert(0, "/Pressention/Views/{1}/{0}.cshtml");
-        options.ViewLocationFormats.Insert(1, "/Pressention/Views/Shared/{0}.cshtml");
+        options.ViewLocationFormats.Insert(0, "/Presentation/Views/{1}/{0}.cshtml");
+        options.ViewLocationFormats.Insert(1, "/Presentation/Views/Shared/{0}.cshtml");
         options.ViewLocationFormats.Insert(2, "/Views/{1}/{0}.cshtml");
         options.ViewLocationFormats.Insert(3, "/Views/Shared/{0}.cshtml");
     });
 
-// --- 2. Caching & Core Services ---
+
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<SemanticCacheService>();
 
-// --- 3. Database Connection ---
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
+    options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// --- 4. Cloudinary Integration ---
+
 var cloudinarySettings = builder.Configuration.GetSection("CloudinarySettings");
 var account = new CloudinaryDotNet.Account(
     cloudinarySettings["CloudName"],
@@ -53,7 +51,7 @@ var account = new CloudinaryDotNet.Account(
 var cloudinary = new CloudinaryDotNet.Cloudinary(account);
 builder.Services.AddSingleton(cloudinary);
 
-// --- 5. SMTP Client Configuration ---
+
 var smtpServer = builder.Configuration["SmtpSettings:Server"];
 var smtpPort = int.Parse(builder.Configuration["SmtpSettings:Port"] ?? "587");
 var smtpLogin = builder.Configuration["SmtpSettings:Login"];
@@ -65,7 +63,7 @@ builder.Services.AddScoped(sp => new SmtpClient(smtpServer, smtpPort)
     EnableSsl = true
 });
 
-// --- 6. ASP.NET Core Identity ---
+
 builder.Services.AddIdentity<Pharmacist, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -81,10 +79,10 @@ builder.Services.AddIdentity<Pharmacist, IdentityRole>(options =>
 .AddDefaultTokenProviders()
 .AddDefaultUI();
 
-// --- 7. Custom Infrastructure Services ---
+
 builder.Services.AddInfrastructureServices();
 
-// --- 8. Typed HttpClient for Pharmasmart AI Service ---
+
 builder.Services.AddHttpClient<IPharmasmartAiService, PharmasmartAiService>((serviceProvider, client) =>
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
@@ -102,7 +100,7 @@ builder.Services.AddHttpClient<IPharmasmartAiService, PharmasmartAiService>((ser
     }
 });
 
-// --- 9. Typed HttpClient for Complaint Classification Service ---
+
 builder.Services.AddHttpClient<IComplaintClassificationService, ComplaintClassificationService>((serviceProvider, client) =>
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
@@ -120,7 +118,7 @@ builder.Services.AddHttpClient<IComplaintClassificationService, ComplaintClassif
     }
 });
 
-// --- 10. Typed HttpClient for Sentiment Analysis Service (تمت إضافة الجزء الجديد هنا) ---
+
 builder.Services.AddHttpClient<ISentimentService, SentimentService>((serviceProvider, client) =>
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
@@ -138,7 +136,7 @@ builder.Services.AddHttpClient<ISentimentService, SentimentService>((serviceProv
     }
 });
 
-// --- 11. Rate Limiting Policies ---
+
 builder.Services.AddRateLimiter(options =>
 {
     options.AddPolicy("LoginRateLimit", context =>
@@ -199,12 +197,10 @@ builder.Services.AddRateLimiter(options =>
     };
 });
 
-// =========================================================================
-// --- 12. Building and Configuring Middleware Pipeline ---
-// =========================================================================
+
 var app = builder.Build();
 
-// Seed Database
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -218,11 +214,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseRateLimiter();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -1,4 +1,5 @@
 ﻿using WebApplication4.Application.Common.Interfaces;
+using WebApplication4.Domain.IRepository;
 
 namespace WebApplication4.Application.Common.Services
 {

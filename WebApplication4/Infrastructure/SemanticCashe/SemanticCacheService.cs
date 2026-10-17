@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using WebApplication4.Application.ChatAi_Component.Dto;
+using WebApplication4.Application.Modules.ChatAi.Dto;
 
 namespace WebApplication4.Infrastructure.SemanticCashe
 {

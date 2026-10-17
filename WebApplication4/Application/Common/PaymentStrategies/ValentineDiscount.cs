@@ -1,5 +1,5 @@
 ﻿using WebApplication4.Domain.Models;
-using WebApplication4.Application.Medcine_Component.Medcine;
+using WebApplication4.Application.Modules.Medicines.Dto;
 namespace WebApplication4.Application.Common.PaymentStrategies
 {
     public class ValentineDiscount : IDiscountStrategy

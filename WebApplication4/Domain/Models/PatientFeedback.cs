@@ -1,4 +1,4 @@
-﻿using WebApplication4.Application.Patient_Component.Patient;
+﻿using WebApplication4.Application.Modules.Patients.Dto;
 using WebApplication4.Domain.Enums;
 namespace WebApplication4.Domain.Models
 {
